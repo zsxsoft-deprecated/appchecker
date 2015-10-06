@@ -6,4 +6,5 @@ if (version_compare("5.3", phpversion()) == 1) {
 	echo 'Not support PHP < 5.3';
 	exit;
 }
+require 'vendor/autoload.php';
 require 'lib/bootstrap.php';

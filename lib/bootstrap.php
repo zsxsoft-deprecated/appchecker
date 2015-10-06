@@ -6,6 +6,7 @@
  * @php >= 5.3
  */
 namespace AppChecker;
+
 foreach (['utils', 'log', 'scanner'] as $index => $item) {
 	require 'lib/' . $item . '.php';
 }

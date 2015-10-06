@@ -4,17 +4,29 @@ namespace AppChecker\Log;
 /**
  * Output error then exit
  * @param string $text
+ * @param bool $exit
  */
-function Error($text) {
-	End("\033[1;31m" . $text . "\033[0m", 1);
+function Error($text, $exit = true) {
+	$text = "\033[1;31m" . $text . "\033[0m";
+	if ($exit) {
+		End($text, 1);
+	} else {
+		Log($text);
+	}
 }
 
 /**
  * Output warning
  * @param string $text
+ * @param bool $exit
  */
-function Warning($text) {
-	Log("\033[1;33m" . $text . "\033[0m", 1);
+function Warning($text, $exit = false) {
+	$text = "\033[1;33m" . $text . "\033[0m";
+	if ($exit) {
+		End($text, 1);
+	} else {
+		Log($text);
+	}
 }
 
 /**
