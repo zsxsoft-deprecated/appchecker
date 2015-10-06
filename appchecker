@@ -1,0 +1,9 @@
+<?php
+$zbp = null;
+$app = null;
+$version = "0.0.1";
+if (version_compare("5.3", phpversion()) == 1) {
+	echo 'Not support PHP < 5.3';
+	exit;
+}
+require 'lib/bootstrap.php';

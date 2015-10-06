@@ -1,0 +1,13 @@
+{
+    "name": "zsxsoft/appchecker",
+    "description": "Z-Blog应用中心上架检测工具",
+    "license": "MIT",
+    "authors": [{
+        "name": "zsx",
+        "email": "zsx@zsxsoft.com"
+    }],
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {}
+}
