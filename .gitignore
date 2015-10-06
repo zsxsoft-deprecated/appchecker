@@ -1,5 +1,6 @@
-$ Composer
+# Composer
 vendor/
+composer.lock
 
 # Windows image file caches
 Thumbs.db
