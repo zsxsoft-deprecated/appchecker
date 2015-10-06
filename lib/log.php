@@ -7,12 +7,12 @@ namespace AppChecker\Log;
  * @param bool $exit
  */
 function Error($text, $exit = true) {
-	$text = "\033[1;31m" . $text . "\033[0m";
 	if ($exit) {
 		End($text, 1);
 	} else {
-		Log($text);
+		Log($text, "1;31");
 	}
+
 }
 
 /**
@@ -21,12 +21,13 @@ function Error($text, $exit = true) {
  * @param bool $exit
  */
 function Warning($text, $exit = false) {
-	$text = "\033[1;33m" . $text . "\033[0m";
+
 	if ($exit) {
 		End($text, 1);
 	} else {
-		Log($text);
+		Log($text, "1;33");
 	}
+
 }
 
 /**
@@ -44,8 +45,20 @@ function Title($text) {
  * Log
  * @param string $text
  */
-function Log($text) {
-	echo "[" . date("Y/m/d h:i:s a") . "] " . iconv("UTF-8", "gbk", $text) . PHP_EOL;
+function Log($text, $color = "") {
+	$text = "[" . date("Y/m/d h:i:s a") . "] " . $text;
+	if (PHP_SYSTEM === SYSTEM_WINDOWS) {
+		$text = iconv("UTF-8", "gbk", $text);
+		if (!(false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI') || 'xterm' === getenv('TERM'))) {
+			$color = "";
+		}
+	}
+	if ($color != "") {
+		$text = "\033[" . $color . "m" . $text . "\033[0m";
+	}
+
+	echo $text . PHP_EOL;
+
 }
 
 /**
