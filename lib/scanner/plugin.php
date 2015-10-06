@@ -5,6 +5,23 @@ $path = "";
 /**
  * Check CUrl
  */
+function CheckUnsafeFunctions() {
+	global $file;
+	global $path;
+	if (!preg_match('/\.php$/i', $path)) {
+		return;
+	}
+
+	$regex = "/(system|eval|exec)[ \t]*?(\(|\\$|\"|')/i";
+	$matches = null;
+	if (preg_match($regex, $file, $matches)) {
+		\AppChecker\Log\Warning('Maybe using unsafe function ' . $matches[1] . ' in ' . $path);
+	}
+}
+
+/**
+ * Check Order By Rand
+ */
 function CheckOrderByRand() {
 	global $file;
 	global $path;
@@ -39,6 +56,7 @@ function RunChecker($filePath) {
 	$file = file_get_contents($path);
 	CheckCurl();
 	CheckOrderByRand();
+	CheckUnsafeFunctions();
 
 }
 /**

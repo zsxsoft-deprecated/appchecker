@@ -15,10 +15,9 @@ if (!chdir($config->path)) {
 	Log\Error('Cannot open ' . $config->path);
 }
 require 'zb_system/function/c_system_base.php';
+\ZBlogException::ClearErrorHook();
 Log\Log('Loading Z-BlogPHP...');
 $zbp->Load();
-restore_error_handler();
-restore_exception_handler();
 Log\Log('Completed!');
 Log\Log('Getting App...');
 if (count($argv) == 1) {
