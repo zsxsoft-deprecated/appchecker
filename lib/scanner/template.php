@@ -2,6 +2,19 @@
 namespace AppChecker\Scanner\Template;
 $file = "";
 $path = "";
+/**
+ * Check Useless jQuery
+ */
+function CheckUselessJQuery() {
+	global $file;
+	global $path;
+	$regex = "/src=[\"']?(((?!zb_system).)*?jquery[\.0-9\-]*?(min)?\.js)[\"']?/i";
+	$matches = null;
+	return;
+	if (preg_match($regex, $file, $matches)) {
+		\AppChecker\Log\Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $path);
+	}
+}
 
 function DisplayErrors($object, $type) {
 	$function = "\AppChecker\\Log\\" . ucfirst($type);
@@ -45,18 +58,6 @@ function CheckW3C() {
 	$zbp->Config('system')->ZC_BLOG_THEME = $origTheme;
 	$zbp->Config('system')->ZC_BLOG_CSS = $origCSS;
 	$zbp->SaveConfig('system');
-}
-/**
- * Check Useless jQuery
- */
-function CheckUselessJQuery() {
-	global $file;
-	global $path;
-	$regex = "/src=[\"']?(((?!zb_system).)*?jquery[\.0-9\-]*?(min)?\.js)[\"']?/i";
-	$matches = null;
-	if (preg_match($regex, $file, $matches)) {
-		\AppChecker\Log\Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $path);
-	}
 }
 /**
  * Run Checker

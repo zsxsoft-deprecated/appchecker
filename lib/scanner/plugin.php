@@ -5,6 +5,19 @@ $path = "";
 /**
  * Check CUrl
  */
+function CheckOrderByRand() {
+	global $file;
+	global $path;
+	$regex = "/[\"']rand\(\)[\"'][ \t]*?\=\>[\"'][ \t]*?[\"']|ORDER[ \t]*BY[\t ]*rand\(/i";
+	$matches = null;
+	if (preg_match($regex, $file)) {
+		\AppChecker\Log\Warning('Maybe using rand() in MySQL in ' . $path);
+		\AppChecker\Log\Warning('You should remove it.');
+	}
+}
+/**
+ * Check CUrl
+ */
 function CheckCurl() {
 	global $file;
 	global $path;
@@ -25,6 +38,8 @@ function RunChecker($filePath) {
 	$path = $filePath;
 	$file = file_get_contents($path);
 	CheckCurl();
+	CheckOrderByRand();
+
 }
 /**
  * Run
@@ -39,6 +54,7 @@ function Run() {
 	foreach (\AppChecker\Utils\ScanDirectory($templateDir) as $index => $value) {
 		RunChecker($value);
 	}
+
 }
 
 return __NAMESPACE__;
