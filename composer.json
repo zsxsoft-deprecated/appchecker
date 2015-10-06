@@ -6,9 +6,13 @@
         "name": "zsx",
         "email": "zsx@zsxsoft.com"
     }],
+    "repositories": [{
+        "type": "vcs", 
+        "url": "https://github.com/zblogapp/w3c-validator"
+    }],
     "require": {
         "php": ">=5.3",
-        "micheh/w3c-validator": "^0.1.0"
+        "micheh/w3c-validator": "dev-master"
     },
     "require-dev": {}
 }

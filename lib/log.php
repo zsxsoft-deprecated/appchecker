@@ -45,7 +45,7 @@ function Title($text) {
  * @param string $text
  */
 function Log($text) {
-	echo "[" . date("Y/m/d h:i:s a") . "] " . $text . PHP_EOL;
+	echo "[" . date("Y/m/d h:i:s a") . "] " . iconv("UTF-8", "gbk", $text) . PHP_EOL;
 }
 
 /**

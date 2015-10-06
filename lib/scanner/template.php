@@ -5,7 +5,7 @@ $path = "";
 
 function DisplayErrors($object, $type) {
 	$function = "\AppChecker\\Log\\" . ucfirst($type);
-	$function('In Line ' . $object->getLine() . ', Col ' . $object->getColumn() . ", " . $object->getMessage(), false);
+	$function('In Line ' . $object->getLine() . ', Col ' . $object->getColumn() . ", " . str_replace("\n", "", $object->getMessage()), false);
 }
 
 function CheckW3C() {
@@ -27,7 +27,7 @@ function CheckW3C() {
 
 	ob_flush();
 	$validator = new \W3C\HtmlValidator();
-	$result = $validator->validateInput(file_get_contents($zbp->host));
+	$result = $validator->validateHTML5(file_get_contents($zbp->host));
 
 	if ($result->isValid()) {
 		\AppChecker\Log\Log('Validation successful');
