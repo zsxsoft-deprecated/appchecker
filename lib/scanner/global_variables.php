@@ -87,12 +87,8 @@ function Run() {
 	LoadGlobals('functions', function () {
 		return get_defined_functions()['user'];
 	});
-	LoadGlobals('constants', function () {
-		return get_defined_constants();
-	});
-	LoadGlobals('classes__', function () {
-		return get_declared_classes();
-	});
+	LoadGlobals('constants', get_defined_constants);
+	LoadGlobals('classes__', get_declared_classes);
 	$filename = $zbp->path . '/zb_users/' . $app->type . '/' . $app->id . '/include.php';
 	if (!\AppChecker\Utils\includeFile($filename)) {
 		\AppChecker\Log\Log('No include file.');

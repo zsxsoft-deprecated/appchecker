@@ -8,7 +8,7 @@ $path = "";
 function CheckUselessJQuery() {
 	global $file;
 	global $path;
-	$regex = "/src=[\"']?(.*?jquery.*?\.js)[\"']?/i";
+	$regex = "/src=[\"']?(.*?jquery[\.0-9\-]*?(min)?\.js)[\"']?/i";
 	$matches = null;
 	if (preg_match($regex, $file, $matches)) {
 		\AppChecker\Log\Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $path);
