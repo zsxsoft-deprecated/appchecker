@@ -2,9 +2,15 @@ AppChecker
 =============================
 Z-Blog应用中心上架检测工具。
 
+GUI制作中。
 
 ## 使用说明
 php appchecker [YOUR_APP_ID]
+
+## 环境要求
+.NET Framework 4.5
+
+PHP 5.4+
 
 ## 检测内容
 1. 不规范的全局变量、函数等命名
