@@ -42,6 +42,6 @@
         </Grid>
         <TextBox x:Name="txtWebsiteUrl" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" TextWrapping="Wrap" Margin="10,14" Text="{Binding Path=WebsiteUrl, UpdateSourceTrigger=PropertyChanged}" />
         <TextBox x:Name="txtAppID" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" TextWrapping="Wrap" Margin="10,14" Text="{Binding Path=AppId, UpdateSourceTrigger=PropertyChanged}" />
-        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="提交(_T)" x:Name="btnSubmit" Click="btnSubmit_Click"></Button>
+        <Button Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="2" Content="提交(_T)" x:Name="btnSubmit" Click="btnSubmit_Click" IsDefault="True"></Button>
     </Grid>
 </Window>
