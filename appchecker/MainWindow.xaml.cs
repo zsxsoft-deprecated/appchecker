@@ -5,7 +5,7 @@ using System.Windows;
 using System.IO;
 using System.Diagnostics;
 
-namespace appchecker
+namespace AppChecker
 {
 
     public class CheckerInfo : INotifyPropertyChanged

@@ -1,7 +1,7 @@
-﻿<Application x:Class="appchecker.App"
+﻿<Application x:Class="AppChecker.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:appchecker"
+             xmlns:local="clr-namespace:AppChecker"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
