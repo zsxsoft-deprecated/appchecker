@@ -37,7 +37,7 @@ class Bootstrap extends Command {
 		global $scope;
 		global $zbp;
 		global $app;
-		global $blogpath;
+		global $bloghost;
 
 		Log\SetOutputInterface($output);
 
