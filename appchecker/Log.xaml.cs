@@ -68,12 +68,15 @@ namespace AppChecker
         /// <param name="Text">The text.</param>
         public void WriteLine(string Text)
         {
-           AllocConsole();
+            if (Text == null) return;
+            byte[] buffer = Encoding.GetEncoding("GBK").GetBytes(Text);
+            Text = Encoding.UTF8.GetString(buffer);
+            //AllocConsole();
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
                 Regex r = new Regex("\\[(\\d+)(;(\\d+))?m", RegexOptions.IgnoreCase);
                 int lastIndex = 0;
-                if (Text == null) return;
+                
                 // Match the regular expression pattern against a text string.
                 Match m = r.Match(Text);
                 Match n;

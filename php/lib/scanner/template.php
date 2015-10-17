@@ -2,6 +2,28 @@
 namespace AppChecker\Scanner\Template;
 $file = "";
 $path = "";
+
+/**
+ * Validate W3C
+ */
+function ValidateW3C($url) {
+	\AppChecker\Log\Log('Testing ' . $url);
+	ob_flush();
+	$validator = new \W3C\HtmlValidator();
+	$result = $validator->validateHTML5(file_get_contents($url));
+
+	if ($result->isValid()) {
+		\AppChecker\Log\Info('Validation successful');
+	} else {
+		foreach ($result->getErrors() as $error) {
+			DisplayErrors($error, 'Error');
+		}
+		foreach ($result->getWarnings() as $warning) {
+			DisplayErrors($warning, 'Warning');
+		}
+		\AppChecker\Log\Warning('Validation failed: ' . $result->getErrorCount() . " error(s) and " . $result->getWarningCount() . ' warning(s).');
+	}
+}
 /**
  * Check Useless jQuery
  */
@@ -38,21 +60,10 @@ function CheckW3C() {
 	$zbp->Config('system')->ZC_BLOG_CSS = array_keys($app->GetCssFiles())[0];
 	$zbp->SaveConfig('system');
 
-	ob_flush();
-	$validator = new \W3C\HtmlValidator();
-	$result = $validator->validateHTML5(file_get_contents($zbp->host));
-
-	if ($result->isValid()) {
-		\AppChecker\Log\Log('Validation successful');
-	} else {
-		foreach ($result->getErrors() as $error) {
-			DisplayErrors($error, 'Error');
-		}
-		foreach ($result->getWarnings() as $warning) {
-			DisplayErrors($warning, 'Warning');
-		}
-		\AppChecker\Log\Warning('Validation failed: ' . $result->getErrorCount() . " error(s) and " . $result->getWarningCount() . ' warning(s).');
-	}
+	\AppChecker\Log\Log("Validating INDEX");
+	ValidateW3C($zbp->host);
+	//\AppChecker\Log\Log("Validating ?id=1");
+	//ValidateW3C(str_replace('//?', '/?', $zbp->host . "/?id=1"));
 
 	// Revert Theme
 	$zbp->Config('system')->ZC_BLOG_THEME = $origTheme;
