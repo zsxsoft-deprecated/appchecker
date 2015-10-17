@@ -50,6 +50,7 @@ class Bootstrap extends Command {
 			$bloghost = "http://localhost/";
 		}
 		$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] = true;
+		$zbp->option['ZC_ORIGINAL_BLOG_HOST'] = $zbp->option['ZC_BLOG_HOST'];
 		$zbp->option['ZC_BLOG_HOST'] = $bloghost;
 
 		Log\Log('Detected $bloghost = ' . $bloghost);
@@ -71,6 +72,9 @@ class Bootstrap extends Command {
 			}
 		}
 
+		Log\Title("System Information");
+		Log\Info("Z-BlogPHP: " . $zbp->version);
+		Log\Info("System: " . \GetEnvironment());
 		Scanner\Run();
 		Log\Info('OK!');
 	}

@@ -14,5 +14,8 @@ namespace AppChecker
             byte[] bytes = BitConverter.GetBytes(waitRet); 
             return new SolidColorBrush(Color.FromRgb(bytes[1], bytes[2], bytes[0])); 
         }
+
+
     }
+
 }
