@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 namespace AppChecker
 {
@@ -76,41 +77,42 @@ namespace AppChecker
     public partial class MainWindow : Window
     {
         CheckerInfo Data = new CheckerInfo();
-        /// <summary>
-        /// 启动控制台
-        /// </summary>
-        [DllImport("kernel32.dll")]
-        public static extern bool AllocConsole();
-
-        /// <summary>
-        /// 释放控制台
-        /// </summary>
-        [DllImport("kernel32.dll")]
-        public static extern bool FreeConsole();
+        Log WindowLog = new Log();
         public MainWindow()
         {
-            
             InitializeComponent();
             txtPHPPath.DataContext = Data;
+            txtZBPPath.DataContext = Data;
             txtAppID.DataContext = Data;
+
+
+            WindowLog.Show();
         }
+
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            AllocConsole();
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo();
-            p.StartInfo.FileName = Data.PHPPath;
-            p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + "\\php";
-            p.StartInfo.Arguments = " checker " + Data.AppId;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.CreateNoWindow = true;
-            p.Start();
-            p.OutputDataReceived += (receivedSender, args) => Console.WriteLine(args.Data);
-            p.BeginOutputReadLine();
-            p.WaitForExit();
+            Thread Caller = new Thread((ThreadStart)delegate
+            {
+                WindowLog.Clear();
+                Process p = new Process();
+                p.StartInfo = new ProcessStartInfo();
+                p.StartInfo.FileName = Data.PHPPath;
+                p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
+                p.StartInfo.EnvironmentVariables["ZBP_PATH"] = Data.ZBPPath;
+                p.StartInfo.EnvironmentVariables["ConEmuANSI"] = "ON";
+                p.StartInfo.Arguments = " checker " + Data.AppId;
+                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+                p.OutputDataReceived += (eventSender, args) => WindowLog.WriteLine(args.Data);
+                p.BeginOutputReadLine();
+                p.WaitForExit();
+            });
+            Caller.Start();
+            
         }
     
 

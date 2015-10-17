@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="Log" Height="307" Width="724">
     <Grid>
-        <RichTextBox x:Name="richTextBox" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top">
+        <RichTextBox x:Name="richTextBox" Background="Black" FontSize="16" FontFamily="Consolas" VerticalScrollBarVisibility="Visible">
             <FlowDocument>
                 <Paragraph>
-                    <Run Text=""/>
+                    <Run Text="日志"/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
