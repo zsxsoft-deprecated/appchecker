@@ -6,9 +6,17 @@ if (version_compare("5.3", phpversion()) == 1) {
 	echo 'Not support PHP < 5.3';
 	exit;
 }
-if (!is_readable('php/vendor/autoload.php')) {
+
+chdir('./php');
+if (!is_readable('vendor/autoload.php')) {
 	echo 'You should install composer from https://getcomposer.org/ and run ``composer install`` firstly.';
 	exit;
 }
-require 'php/vendor/autoload.php';
-require 'php/lib/bootstrap.php';
+
+
+// Mock
+$_SERVER["QUERY_STRING"] = "";
+$_SERVER["HTTP_HOST"] = "http://localhost";
+
+require 'vendor/autoload.php';
+require 'lib/bootstrap.php';

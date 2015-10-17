@@ -90,7 +90,9 @@ function Run() {
 	LoadGlobals('constants', function () {
 		return array_keys(get_defined_constants());
 	});
-	LoadGlobals('classes__', get_declared_classes);
+	LoadGlobals('classes__', function () {
+		return get_declared_classes();
+	});
 	$filename = $zbp->path . '/zb_users/' . $app->type . '/' . $app->id . '/include.php';
 	if (!\AppChecker\Utils\includeFile($filename)) {
 		\AppChecker\Log\Log('No include file.');
