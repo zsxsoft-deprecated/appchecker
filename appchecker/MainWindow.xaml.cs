@@ -9,82 +9,19 @@ using System.Threading;
 namespace AppChecker
 {
 
-    public class CheckerInfo : INotifyPropertyChanged
-    {
-        private string _AppId;
-        /// <summary>
-        /// Gets or sets App ID
-        /// </summary>
-        public string AppId
-        {
-            get
-            {
-                return _AppId;
-            }
-            set
-            {
-                if (_AppId == value) return;
-                _AppId = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("AppId"));
-            }
-        }
-        private string _PHPPath;
-        /// <summary>
-        /// Gets or sets PHP Path.
-        /// </summary>
-        public string PHPPath
-        {
-            get
-            {
-                return _PHPPath;
-            }
-            set
-            {
-                if (_PHPPath == value) return;
-                _PHPPath = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("PHPPath"));
-            }
-        }
-        private string _ZBPPath;
-        /// <summary>
-        /// Gets or sets Z-BlogPHP Path.
-        /// </summary>
-        public string ZBPPath
-        {
-            get
-            {
-                return _ZBPPath;
-            }
-            set
-            {
-                if (_ZBPPath == value) return;
-                _ZBPPath = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("ZBPPath"));
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler h = PropertyChanged;
-            if (h != null)
-                h(this, e);
-        }
-    }
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window
     {
-        CheckerInfo Data = new CheckerInfo();
         Log WindowLog = new Log();
         public MainWindow()
         {
             InitializeComponent();
-            txtPHPPath.DataContext = Data;
-            txtZBPPath.DataContext = Data;
-            txtAppID.DataContext = Data;
-
+            Config.Load();
+            txtPHPPath.DataContext = Config.Data;
+            txtZBPPath.DataContext = Config.Data;
+            txtAppID.DataContext = Config.Data;
 
             WindowLog.Show();
         }
@@ -92,16 +29,17 @@ namespace AppChecker
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
+            Config.Save();
             Thread Caller = new Thread((ThreadStart)delegate
             {
                 WindowLog.Clear();
                 Process p = new Process();
                 p.StartInfo = new ProcessStartInfo();
-                p.StartInfo.FileName = Data.PHPPath;
+                p.StartInfo.FileName = Config.Data.PHPPath;
                 p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-                p.StartInfo.EnvironmentVariables["ZBP_PATH"] = Data.ZBPPath;
+                p.StartInfo.EnvironmentVariables["ZBP_PATH"] = Config.Data.ZBPPath;
                 p.StartInfo.EnvironmentVariables["ConEmuANSI"] = "ON";
-                p.StartInfo.Arguments = " checker run " + Data.AppId;
+                p.StartInfo.Arguments = " checker run " + Config.Data.AppId;
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.UseShellExecute = false;
@@ -125,7 +63,7 @@ namespace AppChecker
             {
                 if (ofd.FileName != "")
                 {
-                    Data.PHPPath = ofd.FileName;
+                    Config.Data.PHPPath = ofd.FileName;
                 }
             }
 
@@ -138,7 +76,7 @@ namespace AppChecker
             {
                 if (ofd.SelectedPath != "")
                 {
-                    Data.ZBPPath = ofd.SelectedPath;
+                    Config.Data.ZBPPath = ofd.SelectedPath;
                 }
             }
         }
