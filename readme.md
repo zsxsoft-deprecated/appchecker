@@ -19,3 +19,7 @@ GUI: Windows + .NET Framework 4.5
 1. 未使用网络类，而使用curl的检测
 1. （主题）多余的jQuery
 1. （主题）首页W3C验证
+
+## 开源协议
+
+The MIT License
