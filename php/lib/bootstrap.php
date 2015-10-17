@@ -11,6 +11,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Bootstrap extends Command {
@@ -23,6 +24,12 @@ class Bootstrap extends Command {
 				InputArgument::REQUIRED,
 				'AppID'
 			)
+			->addOption(
+				'bloghost',
+				null,
+				InputOption::VALUE_OPTIONAL,
+				"Your Z-BlogPHP Url that can use webbrowser to access."
+			)
 		;
 	}
 
@@ -30,6 +37,7 @@ class Bootstrap extends Command {
 		global $scope;
 		global $zbp;
 		global $app;
+		global $blogpath;
 
 		Log\SetOutputInterface($output);
 
@@ -37,6 +45,12 @@ class Bootstrap extends Command {
 		Log\Log('Loading Z-BlogPHP...');
 
 		$zbp->Load();
+		$bloghost = $input->getOption('bloghost');
+		if ($bloghost == "") {
+			$bloghost = "http://localhost/";
+		}
+
+		Log\Log('Detected $bloghost = ' . $bloghost);
 		Log\Info('Completed!');
 		Log\Log('Getting App...');
 		$appId = $input->getArgument('appid');

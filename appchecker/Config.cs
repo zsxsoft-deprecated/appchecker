@@ -66,6 +66,25 @@ namespace AppChecker
                 OnPropertyChanged(new PropertyChangedEventArgs("ZBPPath"));
             }
         }
+        private string _WebsiteUrl;
+        /// <summary>
+        /// Gets or sets Z-BlogPHP Path.
+        /// </summary>
+        [DataMember]
+        public string WebsiteUrl
+        {
+            get
+            {
+                return _WebsiteUrl;
+            }
+            set
+            {
+                if (_WebsiteUrl == value) return;
+                _WebsiteUrl = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("WebsiteUrl"));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(PropertyChangedEventArgs e)
