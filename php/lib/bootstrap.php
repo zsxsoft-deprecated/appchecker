@@ -49,6 +49,8 @@ class Bootstrap extends Command {
 		if ($bloghost == "") {
 			$bloghost = "http://localhost/";
 		}
+		$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] = true;
+		$zbp->option['ZC_BLOG_HOST'] = $bloghost;
 
 		Log\Log('Detected $bloghost = ' . $bloghost);
 		Log\Info('Completed!');
