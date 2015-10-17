@@ -9,10 +9,10 @@ namespace AppChecker
 {
     class Utils
     {
-        public static SolidColorBrush ConvertColor(int waitRet)
+        public static SolidColorBrush ConvertColor(long waitRet)
         {
             byte[] bytes = BitConverter.GetBytes(waitRet); 
-            return new SolidColorBrush(Color.FromRgb(bytes[1], bytes[2], bytes[3]));
+            return new SolidColorBrush(Color.FromRgb(bytes[1], bytes[2], bytes[0])); 
         }
     }
 }

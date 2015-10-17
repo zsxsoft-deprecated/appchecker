@@ -21,10 +21,12 @@ function Info($text) {
  * @param bool $exit
  */
 function Error($text, $exit = true) {
+
+	$text = '<error>' . $text . '</error>';
 	if ($exit) {
 		End($text, 1);
 	} else {
-		Log('<error>' . $text . '</error>');
+		Log($text);
 	}
 
 }
@@ -36,10 +38,11 @@ function Error($text, $exit = true) {
  */
 function Warning($text, $exit = false) {
 
+	$text = '<question>' . $text . '</question>';
 	if ($exit) {
 		End($text, 1);
 	} else {
-		Log('<question>' . $text . '</question>');
+		Log($text);
 	}
 
 }
