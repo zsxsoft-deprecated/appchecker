@@ -67,7 +67,7 @@ function Log($text) {
 
 	$text = "[" . date("Y/m/d h:i:s a") . "] " . $text;
 	if (defined('PHP_SYSTEM')) {
-		if (PHP_SYSTEM === SYSTEM_WINDOWS) {
+		if (PHP_SYSTEM === SYSTEM_WINDOWS && getenv("APPCHECKER_GUI_CHARSET") != "GBK") {
 			$text = iconv("UTF-8", "gbk", $text);
 		}
 	}

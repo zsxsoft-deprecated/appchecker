@@ -40,6 +40,7 @@ namespace AppChecker
                 p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
                 p.StartInfo.EnvironmentVariables["ZBP_PATH"] = Config.Data.ZBPPath;
                 p.StartInfo.EnvironmentVariables["ConEmuANSI"] = "ON";
+                //p.StartInfo.EnvironmentVariables["APPCHECKER_GUI_CHARSET"] = "GBK";
                 p.StartInfo.Arguments = " checker run " + Config.Data.AppId + " --bloghost=" + Config.Data.WebsiteUrl;
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 p.StartInfo.RedirectStandardOutput = true;
