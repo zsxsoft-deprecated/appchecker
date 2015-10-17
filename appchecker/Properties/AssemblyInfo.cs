@@ -7,12 +7,12 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("appchecker")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("AppChecker")]
+[assembly: AssemblyDescription("AppChecker for Z-BlogPHP AppCenter")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("appchecker")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("zsx(http://www.zsxsoft.com)")]
+[assembly: AssemblyProduct("AppChecker")]
+[assembly: AssemblyCopyright("https://github.com/zsxsoft/appchecker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -69,8 +69,8 @@ namespace AppChecker
         public void WriteLine(string Text)
         {
             if (Text == null) return;
-            byte[] buffer = Encoding.GetEncoding("GBK").GetBytes(Text);
-            Text = Encoding.UTF8.GetString(buffer);
+            //byte[] buffer = Encoding.GetEncoding("GBK").GetBytes(Text);
+            //Text = Encoding.UTF8.GetString(buffer);
             //AllocConsole();
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
