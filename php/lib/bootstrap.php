@@ -70,6 +70,7 @@ class Bootstrap extends Command {
 				Log\Error('App not Found!');
 			}
 		}
+
 		Scanner\Run();
 		Log\Info('OK!');
 	}

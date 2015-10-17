@@ -17,8 +17,10 @@ GUI: Windows + .NET Framework 4.5
 ## 检测内容
 1. 不规范的全局变量、函数等命名
 1. 未使用网络类，而使用curl的检测
+1. [在数据库内使用rand函数](http://bbs.zblogcn.com/forum.php?mod=viewthread&tid=90433&extra=)
 1. （主题）多余的jQuery
 1. （主题）首页W3C验证
+1. 
 
 ## 开源协议
 
