@@ -47,10 +47,11 @@ function CheckW3C() {
 	global $zbp;
 	global $app;
 	\AppChecker\Log\Log("Checking W3C...");
-	if (!$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
-		\AppChecker\Log\Warning("You should permanentize your domain to validate.");
-		return;
-	}
+	$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] = true;
+	//if (!$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
+	//\AppChecker\Log\Warning("You should permanentize your domain to validate.");
+	//return;
+	//}
 
 	\AppChecker\Log\Log("Changing Theme...");
 	// Change Theme
