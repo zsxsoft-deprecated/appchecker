@@ -101,7 +101,7 @@ namespace AppChecker
                 p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
                 p.StartInfo.EnvironmentVariables["ZBP_PATH"] = Data.ZBPPath;
                 p.StartInfo.EnvironmentVariables["ConEmuANSI"] = "ON";
-                p.StartInfo.Arguments = " checker " + Data.AppId;
+                p.StartInfo.Arguments = " checker run " + Data.AppId;
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.UseShellExecute = false;
