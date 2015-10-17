@@ -37,7 +37,7 @@ class Bootstrap extends Command {
 		Log\Log('Loading Z-BlogPHP...');
 
 		$zbp->Load();
-		Log\Log('Completed!');
+		Log\Info('Completed!');
 		Log\Log('Getting App...');
 		$appId = $input->getArgument('appid');
 		if ($zbp->CheckApp($appId)) {
@@ -45,17 +45,17 @@ class Bootstrap extends Command {
 		}
 		$app = $zbp->LoadApp('plugin', $appId);
 		if ($app->id !== null) {
-			Log\Log('Detected Plugin.');
+			Log\Info('Detected Plugin.');
 		} else {
 			$app = $zbp->LoadApp('theme', $appId);
 			if ($app->id !== null) {
-				Log\Log('Detected Theme.');
+				Log\Info('Detected Theme.');
 			} else {
 				Log\Error('App not Found!');
 			}
 		}
 		Scanner\Run();
-		Log\Log('OK!');
+		Log\Info('OK!');
 	}
 }
 

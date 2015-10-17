@@ -8,6 +8,14 @@ function SetOutputInterface(&$interface) {
 }
 
 /**
+ * Output info
+ * @param string $text
+ * @param bool $exit
+ */
+function Info($text) {
+	Log('<info>' . $text . '</info>');
+}
+/**
  * Output error then exit
  * @param string $text
  * @param bool $exit

@@ -84,6 +84,7 @@ namespace AppChecker
             DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(CheckerInfo));
             FileStream Fs = File.Open("Config.json", FileMode.Open);
             Data = (CheckerInfo)Serializer.ReadObject(Fs);
+            Fs.Close();
             return true;
         }
 

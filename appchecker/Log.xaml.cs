@@ -20,14 +20,13 @@ namespace AppChecker
     /// </summary>
     public partial class Log : Window
     {
-        public SolidColorBrush[] Colors;
         // From ConEmu
         // https://github.com/Maximus5/ConEmu/blob/e1f0c20cf546f01585d1dcb6c3115535fff12ced/src/ConEmuHk/Ansi.cpp
         static int[] ClrMap = { 0, 4, 2, 6, 1, 5, 3, 7 };
         // XTerm-256 colors
         static int[] RgbMap = {0,4,2,6,1,5,3,7, 8+0,8+4,8+2,8+6,8+1,8+5,8+3,8+7, // System Ansi colors
 			/*16*/0x000000, /*17*/0x5f0000, /*18*/0x870000, /*19*/0xaf0000, /*20*/0xd70000, /*21*/0xff0000, /*22*/0x005f00, /*23*/0x5f5f00, /*24*/0x875f00, /*25*/0xaf5f00, /*26*/0xd75f00, /*27*/0xff5f00,
-			/*28*/0x008700, /*29*/0x5f8700, /*30*/0x878700, /*31*/0xaf8700, /*32*/0xd78700, /*33*/0xff8700, /*34*/0x00af00, /*35*/0x5faf00, /*36*/0x87af00, /*37*/0xafaf00, /*38*/0xd7af00, /*39*/0xffaf00,
+			/*28*/0x008700, /*29*/0x5f8700, /*30*/0x878700, /*31*/0xaf8700, /*32*/0xd78700, /*33*/0xff0000, /*34*/0x00af00, /*35*/0x5faf00, /*36*/0x87af00, /*37*/0xafaf00, /*38*/0xd7af00, /*39*/0xffaf00,
 			/*40*/0x00d700, /*41*/0x5fd700, /*42*/0x87d700, /*43*/0xafd700, /*44*/0xd7d700, /*45*/0xffd700, /*46*/0x00ff00, /*47*/0x5fff00, /*48*/0x87ff00, /*49*/0xafff00, /*50*/0xd7ff00, /*51*/0xffff00,
 			/*52*/0x00005f, /*53*/0x5f005f, /*54*/0x87005f, /*55*/0xaf005f, /*56*/0xd7005f, /*57*/0xff005f, /*58*/0x005f5f, /*59*/0x5f5f5f, /*60*/0x875f5f, /*61*/0xaf5f5f, /*62*/0xd75f5f, /*63*/0xff5f5f,
 			/*64*/0x00875f, /*65*/0x5f875f, /*66*/0x87875f, /*67*/0xaf875f, /*68*/0xd7875f, /*69*/0xff875f, /*70*/0x00af5f, /*71*/0x5faf5f, /*72*/0x87af5f, /*73*/0xafaf5f, /*74*/0xd7af5f, /*75*/0xffaf5f,
@@ -58,38 +57,59 @@ namespace AppChecker
             {
                 richTextBox.SelectAll();
                 richTextBox.Selection.Text = "";
-                TextRange rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd);
-                rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
             });
         }
 
-
+        [System.Runtime.InteropServices.DllImport("kernel32")]
+        static extern bool AllocConsole();
+        /// <summary>
+        /// Writes the line.
+        /// </summary>
+        /// <param name="Text">The text.</param>
         public void WriteLine(string Text)
         {
+            AllocConsole();
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
-                Regex r = new Regex("\\[(\\d+)(;\\d+)?m", RegexOptions.IgnoreCase);
+                Regex r = new Regex("\\[(\\d+)(;(\\d+))?m", RegexOptions.IgnoreCase);
                 int lastIndex = 0;
                 if (Text == null) return;
                 // Match the regular expression pattern against a text string.
                 Match m = r.Match(Text);
-                TextRange rangeOfWord;
+                Match n;
+                TextRange rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd);
+                int BackgroundColor = 255;
+                int ForegroundColor = 0;
+                Console.WriteLine(Text);
+                if (m.Success)
+                {
+                    rangeOfWord.Text = Text.Substring(0, m.Index);
+                }
                 while (m.Success)
                 {
+                    BackgroundColor = Convert.ToInt32(m.Groups[3].Value != "" ? m.Groups[3].Value : "0"); // ;number
+                    ForegroundColor = Convert.ToInt32(m.Groups[1].Value);
                     rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd);
-                    int BackgroundColor = Convert.ToInt32(m.Groups[2].Value.Substring(1)); // ;number
-                    int ForegroundColor = Convert.ToInt32(m.Groups[1].Value);
-                    //rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, Utils.ConvertColor(RgbMap[BackgroundColor]));
-                    rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, Utils.ConvertColor(RgbMap[ForegroundColor]));//Colors[Convert.ToInt16(m.Groups[1].Value)]);
+                    n = m.NextMatch();
                     lastIndex = m.Index + m.Length;
-                    m = m.NextMatch(); 
-                    if (m.Success)
+                    if (n.Success)
                     {
-                        rangeOfWord.Text = Text.Substring(lastIndex, m.Index - lastIndex);
+                        rangeOfWord.Text = Text.Substring(lastIndex, n.Index - lastIndex);
+                    } else
+                    {
+                        rangeOfWord.Text = Text.Substring(lastIndex);
                     }
+                    //rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, (Utils.ConvertColor(RgbMap[BackgroundColor])));
+                    rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, (Utils.ConvertColor(RgbMap[ForegroundColor])));
+                    rangeOfWord.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Regular);
+                    Console.WriteLine("bg=" + BackgroundColor + ",  fr= " + (Utils.ConvertColor(RgbMap[ForegroundColor])) + ",  text=" + rangeOfWord.Text);
+                    
+                    m = n;
                 }
-                richTextBox.AppendText(Text.Substring(lastIndex));
-                richTextBox.AppendText("\u2028");
+                rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd);
+                rangeOfWord.Text = Text.Substring(lastIndex) + "\u2028";
+                rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
+                rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
                 richTextBox.ScrollToEnd();
             });
         }
