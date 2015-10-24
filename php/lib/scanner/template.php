@@ -31,7 +31,7 @@ function ValidateW3C($url) {
 function CheckUselessJQuery() {
 	global $file;
 	global $path;
-	$regex = "/src=[\"']?(((?!zb_system).)*?jquery[\.0-9\-]*?(min)?\.js)[\"']?/i";
+	$regex = "/src=[\"'](((?!zb_system).)*?jquery[\.0-9\-]*?(min)?\.js)[\"']/i";
 	$matches = null;
 	if (preg_match($regex, $file, $matches)) {
 		Log::Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $path);
