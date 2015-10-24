@@ -1,90 +1,94 @@
 <?php
-namespace AppChecker\Log;
-$outputInterface = null;
+namespace AppChecker;
 
-function SetOutputInterface(&$interface) {
-	global $outputInterface;
-	$outputInterface = $interface;
-}
+class Log {
 
-/**
- * Output info
- * @param string $text
- * @param bool $exit
- */
-function Info($text) {
-	Log('<info>' . $text . '</info>');
-}
-/**
- * Output error then exit
- * @param string $text
- * @param bool $exit
- */
-function Error($text, $exit = true) {
-
-	$text = '<error>' . $text . '</error>';
-	if ($exit) {
-		End($text, 1);
-	} else {
-		Log($text);
+	private static $outputInterface = null;
+	/**
+	 * SetOutputInterface
+	 * @param object &$interface
+	 */
+	public static function SetOutputInterface(&$interface) {
+		self::$outputInterface = $interface;
 	}
 
-}
-
-/**
- * Output warning
- * @param string $text
- * @param bool $exit
- */
-function Warning($text, $exit = false) {
-
-	$text = '<question>' . $text . '</question>';
-	if ($exit) {
-		End($text, 1);
-	} else {
-		Log($text);
+	/**
+	 * Output info
+	 * @param string $text
+	 * @param bool $exit
+	 */
+	public static function Info($text) {
+		self::Log('<info>' . $text . '</info>');
 	}
+	/**
+	 * Output error then exit
+	 * @param string $text
+	 * @param bool $exit
+	 */
+	public static function Error($text, $exit = true) {
 
-}
-
-/**
- * Output title
- * @param string $text
- */
-function Title($text) {
-	global $outputInterface;
-	$boundary = "===================================================================";
-	$outputInterface->writeln($boundary);
-	$outputInterface->writeln(str_repeat(" ", (strlen($boundary) - strlen($text)) / 2) . $text);
-	$outputInterface->writeln($boundary);
-}
-/**
- * Log
- * @param string $text
- */
-function Log($text) {
-	global $outputInterface;
-
-	$text = "[" . date("Y/m/d h:i:s a") . "] " . $text;
-	if (defined('PHP_SYSTEM')) {
-		if (PHP_SYSTEM === SYSTEM_WINDOWS && getenv("APPCHECKER_GUI_CHARSET") != "GBK") {
-			$text = iconv("UTF-8", "gbk", $text);
+		$text = '<error>' . $text . '</error>';
+		if ($exit) {
+			self::End($text, 1);
+		} else {
+			self::Log($text);
 		}
+
 	}
 
-	if (is_null($outputInterface)) {
-		echo $text;
-	} else {
-		$outputInterface->writeln($text);
+	/**
+	 * Output warning
+	 * @param string $text
+	 * @param bool $exit
+	 */
+	public static function Warning($text, $exit = false) {
+
+		$text = '<question>' . $text . '</question>';
+		if ($exit) {
+			self::End($text, 1);
+		} else {
+			self::Log($text);
+		}
+
 	}
 
-}
+	/**
+	 * Output title
+	 * @param string $text
+	 */
+	public static function Title($text) {
+		$boundary = "===================================================================";
+		self::$outputInterface->writeln($boundary);
+		self::$outputInterface->writeln(str_repeat(" ", (strlen($boundary) - strlen($text)) / 2) . $text);
+		self::$outputInterface->writeln($boundary);
+	}
+	/**
+	 * Log
+	 * @param string $text
+	 */
+	public static function Log($text) {
 
-/**
- * Output something then exit
- * @param string $text
- */
-function End($text, $errno = 0) {
-	Log($text);
-	exit($errno);
+		$text = "[" . date("Y/m/d h:i:s a") . "] " . $text;
+		if (defined('PHP_SYSTEM')) {
+			if (PHP_SYSTEM === SYSTEM_WINDOWS && getenv("APPCHECKER_GUI_CHARSET") != "GBK") {
+				$text = iconv("UTF-8", "gbk", $text);
+			}
+		}
+
+		if (is_null(self::$outputInterface)) {
+			echo $text;
+		} else {
+			self::$outputInterface->writeln($text);
+		}
+
+	}
+
+	/**
+	 * Output something then exit
+	 * @param string $text
+	 */
+	public static function End($text, $errno = 0) {
+		self::Log($text);
+		exit($errno);
+	}
 }

@@ -1,5 +1,7 @@
 <?php
 namespace AppChecker\Scanner\Plugin;
+use AppChecker\Log as Log;
+
 $file = "";
 $path = "";
 /**
@@ -15,7 +17,7 @@ function CheckUnsafeFunctions() {
 	$regex = "/(system|eval|exec)[ \t]*?(\(|\\$|\"|')/i";
 	$matches = null;
 	if (preg_match($regex, $file, $matches)) {
-		\AppChecker\Log\Warning('Maybe using unsafe function ' . $matches[1] . ' in ' . $path);
+		Log::Warning('Maybe using unsafe function ' . $matches[1] . ' in ' . $path);
 	}
 }
 
@@ -28,8 +30,8 @@ function CheckOrderByRand() {
 	$regex = "/[\"']rand\(\)[\"'][ \t]*?\=\>[\"'][ \t]*?[\"']|ORDER[ \t]*BY[\t ]*rand\(/i";
 	$matches = null;
 	if (preg_match($regex, $file)) {
-		\AppChecker\Log\Warning('Maybe using rand() in MySQL in ' . $path);
-		\AppChecker\Log\Warning('You should remove it.');
+		Log::Warning('Maybe using rand() in MySQL in ' . $path);
+		Log::Warning('You should remove it.');
 	}
 }
 /**
@@ -41,8 +43,8 @@ function CheckCurl() {
 	$regex = "/curl_init/i";
 	$matches = null;
 	if (preg_match($regex, $file, $matches)) {
-		\AppChecker\Log\Warning('Maybe using CURL in ' . $path);
-		\AppChecker\Log\Warning('Use class Network to replace it.');
+		Log::Warning('Maybe using CURL in ' . $path);
+		Log::Warning('Use class Network to replace it.');
 	}
 }
 /**
@@ -66,8 +68,8 @@ function Run() {
 	global $zbp;
 	global $app;
 
-	\AppChecker\Log\Title('PLUGIN STANDARD');
-	// \AppChecker\Log\Log('Scanning useless jQuery');
+	Log::Title('PLUGIN STANDARD');
+	// Log::Log('Scanning useless jQuery');
 	$templateDir = $zbp->path . 'zb_users/' . $app->type . '/' . $app->id;
 	foreach (\AppChecker\Utils\ScanDirectory($templateDir) as $index => $value) {
 		RunChecker($value);

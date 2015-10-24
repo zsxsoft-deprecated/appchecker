@@ -7,6 +7,7 @@
  */
 namespace AppChecker;
 
+use AppChecker\Log;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,10 +40,10 @@ class Bootstrap extends Command {
 		global $app;
 		global $bloghost;
 
-		Log\SetOutputInterface($output);
+		Log::SetOutputInterface($output);
 
 		\ZBlogException::ClearErrorHook();
-		Log\Log('Loading Z-BlogPHP...');
+		Log::Log('Loading Z-BlogPHP...');
 
 		$zbp->Load();
 		$bloghost = $input->getOption('bloghost');
@@ -53,30 +54,30 @@ class Bootstrap extends Command {
 		$zbp->option['ZC_ORIGINAL_BLOG_HOST'] = $zbp->option['ZC_BLOG_HOST'];
 		$zbp->option['ZC_BLOG_HOST'] = $bloghost;
 
-		Log\Log('Detected $bloghost = ' . $bloghost);
-		Log\Info('Completed!');
-		Log\Log('Getting App...');
+		Log::Log('Detected $bloghost = ' . $bloghost);
+		Log::Info('Completed!');
+		Log::Log('Getting App...');
 		$appId = $input->getArgument('appid');
 		if ($zbp->CheckApp($appId)) {
-			Log\Error('You should disable ' . $appId . ' in Z-BlogPHP first.');
+			Log::Error('You should disable ' . $appId . ' in Z-BlogPHP first.');
 		}
 		$app = $zbp->LoadApp('plugin', $appId);
 		if ($app->id !== null) {
-			Log\Info('Detected Plugin.');
+			Log::Info('Detected Plugin.');
 		} else {
 			$app = $zbp->LoadApp('theme', $appId);
 			if ($app->id !== null) {
-				Log\Info('Detected Theme.');
+				Log::Info('Detected Theme.');
 			} else {
-				Log\Error('App not Found!');
+				Log::Error('App not Found!');
 			}
 		}
 
-		Log\Title("System Information");
-		Log\Info("Z-BlogPHP: " . $zbp->version);
-		Log\Info("System: " . \GetEnvironment());
-		Scanner\Run();
-		Log\Info('OK!');
+		Log::Title("System Information");
+		Log::Info("Z-BlogPHP: " . $zbp->version);
+		Log::Info("System: " . \GetEnvironment());
+		Scanner::Run();
+		Log::Info('OK!');
 	}
 }
 

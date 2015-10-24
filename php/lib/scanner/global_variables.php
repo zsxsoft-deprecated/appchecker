@@ -1,5 +1,7 @@
 <?php
 namespace AppChecker\Scanner\GlobalVariables;
+use AppChecker\Log as Log;
+
 $store = [];
 
 /**
@@ -30,13 +32,13 @@ function DiffGlobals($class) {
  */
 function CheckFunctions($diff) {
 	global $app;
-	\AppChecker\Log\Log('Testing functions');
+	Log::Log('Testing functions');
 	$regex = str_replace("!!", $app->id, "/^(activeplugin_|installplugin_|uninstallplugin_)!!$|^!!_/si");
 	foreach ($diff as $index => $name) {
 		if (preg_match($regex, $name)) {
-			\AppChecker\Log\Log('Tested function: ' . $name);
+			Log::Log('Tested function: ' . $name);
 		} else {
-			\AppChecker\Log\Error('Sub-standard function: ' . $name);
+			Log::Error('Sub-standard function: ' . $name);
 		}
 	}
 }
@@ -48,13 +50,13 @@ function CheckFunctions($diff) {
  */
 function CheckOthers($class, $diff) {
 	global $app;
-	\AppChecker\Log\Log('Testing ' . $class);
+	Log::Log('Testing ' . $class);
 	$regex = str_replace("!!", $app->id, "/^!!_?/si");
 	foreach ($diff as $index => $name) {
 		if (preg_match($regex, $name)) {
-			\AppChecker\Log\Log('Tested ' . $class . ': ' . $name);
+			Log::Log('Tested ' . $class . ': ' . $name);
 		} else {
-			\AppChecker\Log\Error('Sub-standard ' . $class . ': ' . $name);
+			Log::Error('Sub-standard ' . $class . ': ' . $name);
 		}
 	}
 }
@@ -79,8 +81,8 @@ function Run() {
 	global $zbp;
 	global $app;
 
-	\AppChecker\Log\Title('GLOBAL VARIABLES');
-	\AppChecker\Log\Log('Scanning functions and global variables');
+	Log::Title('GLOBAL VARIABLES');
+	Log::Log('Scanning functions and global variables');
 	LoadGlobals('variables', function () {
 		return array_keys($GLOBALS);
 	});
@@ -95,7 +97,7 @@ function Run() {
 	});
 	$filename = $zbp->path . '/zb_users/' . $app->type . '/' . $app->id . '/include.php';
 	if (!\AppChecker\Utils\includeFile($filename)) {
-		\AppChecker\Log\Log('No include file.');
+		Log::Log('No include file.');
 		return;
 	}
 
