@@ -41,10 +41,7 @@ class Bootstrap extends Command {
 		global $bloghost;
 
 		Log::SetOutputInterface($output);
-		Log::Log('Loading Z-BlogPHP...');
 
-		$zbp->Load();
-		\ZBlogException::ClearErrorHook();
 		$bloghost = $input->getOption('bloghost');
 		if ($bloghost == "") {
 			$bloghost = "http://localhost/";
@@ -89,6 +86,9 @@ if (!is_dir($path) || !chdir($path)) {
 	exit;
 }
 require 'zb_system/function/c_system_base.php';
+Log::Log('Loading Z-BlogPHP...');
+$zbp->Load();
+\ZBlogException::ClearErrorHook();
 
 $application = new Application();
 $application->add(new Bootstrap());

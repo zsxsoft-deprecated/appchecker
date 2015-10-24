@@ -76,7 +76,7 @@ class Log {
 		}
 
 		if (is_null(self::$outputInterface)) {
-			echo $text;
+			echo $text . PHP_EOL;
 		} else {
 			self::$outputInterface->writeln($text);
 		}
