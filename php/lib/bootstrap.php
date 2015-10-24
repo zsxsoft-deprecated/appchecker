@@ -41,11 +41,10 @@ class Bootstrap extends Command {
 		global $bloghost;
 
 		Log::SetOutputInterface($output);
-
-		\ZBlogException::ClearErrorHook();
 		Log::Log('Loading Z-BlogPHP...');
 
 		$zbp->Load();
+		\ZBlogException::ClearErrorHook();
 		$bloghost = $input->getOption('bloghost');
 		if ($bloghost == "") {
 			$bloghost = "http://localhost/";
