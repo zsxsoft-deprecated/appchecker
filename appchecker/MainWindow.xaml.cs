@@ -5,6 +5,7 @@ using System.Windows;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using System.Text;
 
 namespace AppChecker
 {
@@ -38,9 +39,10 @@ namespace AppChecker
                 p.StartInfo = new ProcessStartInfo();
                 p.StartInfo.FileName = Config.Data.PHPPath;
                 p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
+                p.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(65001); //Utils.GetCodePage());
                 p.StartInfo.EnvironmentVariables["ZBP_PATH"] = Config.Data.ZBPPath;
                 p.StartInfo.EnvironmentVariables["ConEmuANSI"] = "ON";
-                //p.StartInfo.EnvironmentVariables["APPCHECKER_GUI_CHARSET"] = "GBK";
+                p.StartInfo.EnvironmentVariables["APPCHECKER_GUI_CHARSET"] = "UTF-8";
                 p.StartInfo.Arguments = " checker run " + Config.Data.AppId + " --bloghost=" + Config.Data.WebsiteUrl;
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 p.StartInfo.RedirectStandardOutput = true;

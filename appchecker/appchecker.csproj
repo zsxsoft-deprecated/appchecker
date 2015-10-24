@@ -74,7 +74,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Config.cs" />
-    <Compile Include="Utf8Checker.cs" />
     <Compile Include="Utils.cs" />
     <Page Include="Log.xaml">
       <SubType>Designer</SubType>

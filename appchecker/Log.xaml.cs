@@ -24,11 +24,11 @@ namespace AppChecker
         /// The color map
         /// <see cref="http://tldp.org/LDP/abs/html/colorizing.html"/>
         /// </summary>
-        static Color[] ColorMap =
+        static SolidColorBrush[] ColorMap =
         {
-            Colors.Black, Colors.PaleVioletRed, Colors.LightGreen, 
-            Colors.Yellow, Colors.LightBlue, Colors.Magenta,
-            Colors.Cyan, Colors.White
+            Brushes.Black, Brushes.PaleVioletRed, Brushes.LightGreen,
+            Brushes.Yellow, Brushes.LightBlue, Brushes.Magenta,
+            Brushes.Cyan, Brushes.White
         };
 
         public Log()
@@ -47,19 +47,15 @@ namespace AppChecker
 
         [System.Runtime.InteropServices.DllImport("kernel32")]
         static extern bool AllocConsole();
+        
         /// <summary>
-        /// Writes the line.
+        /// Writes to the emulator.
         /// </summary>
         /// <param name="Text">The text.</param>
         public void WriteLine(string Text)
         {
             if (Text == null) return;
-            if (!Unicode.Utf8Checker.IsUtf8(Text))
-            {
-                byte[] buffer = Encoding.GetEncoding("GBK").GetBytes(Text);
-                Text = Encoding.UTF8.GetString(buffer);
-            }
-            
+            Text = Text.Replace("\u001b", "");
             //AllocConsole();
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
@@ -93,8 +89,8 @@ namespace AppChecker
                     {
                         rangeOfWord.Text = Text.Substring(lastIndex);
                     }
-                    rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, (Utils.ConvertColor(ColorMap[BackgroundColor])));
-                    rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, (Utils.ConvertColor(ColorMap[ForegroundColor])));
+                    rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, (ColorMap[BackgroundColor]));
+                    rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, (ColorMap[ForegroundColor]));
                     rangeOfWord.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Regular);
                     Console.WriteLine("ORIG =" + Text);
                     Console.WriteLine("bg=" + BackgroundColor + ",  fr= " + ForegroundColor + ",  text=" + rangeOfWord.Text);

@@ -70,7 +70,7 @@ class Log {
 
 		$text = "[" . date("Y/m/d h:i:s a") . "] " . $text;
 		if (defined('PHP_SYSTEM')) {
-			if (PHP_SYSTEM === SYSTEM_WINDOWS && getenv("APPCHECKER_GUI_CHARSET") != "GBK") {
+			if (PHP_SYSTEM === SYSTEM_WINDOWS && getenv("APPCHECKER_GUI_CHARSET") != "UTF-8") {
 				$text = iconv("UTF-8", "gbk", $text);
 			}
 		}
