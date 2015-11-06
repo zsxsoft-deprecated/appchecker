@@ -1,6 +1,7 @@
 <?php
 namespace AppChecker\Scanner\GlobalVariables;
 use AppChecker\Log as Log;
+use AppChecker\Utils as Utils;
 
 $store = [];
 
@@ -38,7 +39,12 @@ function CheckFunctions($diff) {
 		if (preg_match($regex, $name)) {
 			Log::Log('Tested function: ' . $name);
 		} else {
-			Log::Error('Sub-standard function: ' . $name);
+			Log::Error('Sub-standard function: ' . $name, false);
+			if ($ret = Utils\GetFunctionDescription($name)) {
+				Log::Error("In " . $ret->getFileName() , false);
+				Log::Error("Line " . ($ret->getStartLine() - 1) . " To " . ($ret->getEndLine() - 1), false);
+			}
+			Log::Error("Exited");
 		}
 	}
 }

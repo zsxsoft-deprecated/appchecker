@@ -1,5 +1,6 @@
 <?php
 namespace AppChecker\Utils;
+
 /**
  * Include file
  * @param string $path
@@ -13,7 +14,18 @@ function IncludeFile($path) {
 		return false;
 	}
 }
+/**
+ * Get Function Description 
+ */
+function GetFunctionDescription($function) {
+	try	{
+		return new \ReflectionFunction($function);
+	} catch (\ReflectionException $e) {
+		echo $e->getMessage();
+		return false;
+	}
 
+}
 /**
  * Extracts all global variables as references and includes the file.
  * Useful for including legacy plugins.
