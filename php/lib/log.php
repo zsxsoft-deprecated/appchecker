@@ -75,6 +75,8 @@ class Log {
 			}
 		}
 
+		ob_flush();
+		flush();
 		if (is_null(self::$outputInterface)) {
 			echo $text . PHP_EOL;
 		} else {
