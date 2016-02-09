@@ -6,7 +6,6 @@
  * @php >= 5.3
  */
 namespace AppChecker;
-
 use AppChecker\Log;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -46,8 +45,8 @@ class Bootstrap extends Command {
 		if ($bloghost == "") {
 			$bloghost = "http://localhost/";
 		}
-		$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] = true;
-		$zbp->option['ZC_ORIGINAL_BLOG_HOST'] = $zbp->option['ZC_BLOG_HOST'];
+		//$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] = false;
+		//$zbp->option['ZC_ORIGINAL_BLOG_HOST'] = $zbp->option['ZC_BLOG_HOST'];
 		$zbp->option['ZC_BLOG_HOST'] = $bloghost;
 
 		Log::Log('Detected $bloghost = ' . $bloghost);
@@ -86,6 +85,7 @@ if (!is_dir($path) || !chdir($path)) {
 	exit;
 }
 require 'zb_system/function/c_system_base.php';
+
 Log::Log('Loading Z-BlogPHP...');
 $zbp->Load();
 \ZBlogException::ClearErrorHook();

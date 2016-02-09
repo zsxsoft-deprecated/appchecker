@@ -62,7 +62,7 @@ function CheckW3C() {
 	$zbp->SaveConfig('system');
 
 	Log::Log("Validating INDEX");
-	ValidateW3C($zbp->option['ZC_ORIGINAL_BLOG_HOST']);
+	ValidateW3C($zbp->host);
 	//Log::Log("Validating ?id=1");
 	//ValidateW3C(str_replace('//?', '/?', $zbp->host . "/?id=1"));
 
