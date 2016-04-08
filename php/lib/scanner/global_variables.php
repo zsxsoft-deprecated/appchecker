@@ -34,14 +34,14 @@ function DiffGlobals($class) {
 function CheckFunctions($diff) {
 	global $app;
 	Log::Log('Testing functions');
-	$regex = str_replace("!!", $app->id, "/^(activeplugin_|installplugin_|uninstallplugin_)!!$|^!!_/si");
+	$regex = str_replace("!!", $app->id, "/^(activeplugin_|installplugin_|uninstallplugin_)!!$|^!!_|^!!$/si");
 	foreach ($diff as $index => $name) {
 		if (preg_match($regex, $name)) {
 			Log::Log('Tested function: ' . $name);
 		} else {
 			Log::Error('Sub-standard function: ' . $name, false);
 			if ($ret = Utils\GetFunctionDescription($name)) {
-				Log::Error("In " . $ret->getFileName() , false);
+				Log::Error("In " . $ret->getFileName(), false);
 				Log::Error("Line " . ($ret->getStartLine() - 1) . " To " . ($ret->getEndLine() - 1), false);
 			}
 			Log::Error("Exited");
