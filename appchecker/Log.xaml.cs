@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace AppChecker
 {
@@ -38,7 +29,7 @@ namespace AppChecker
 
         public void Clear()
         {
-            Application.Current.Dispatcher.Invoke((Action)delegate
+            Application.Current.Dispatcher.Invoke(()=>
             {
                 richTextBox.SelectAll();
                 richTextBox.Selection.Text = "";
@@ -54,14 +45,14 @@ namespace AppChecker
         /// <param name="Text">The text.</param>
         public void WriteLine(string Text)
         {
-            if (Text == null) return;
+            if (string.IsNullOrEmpty(Text)) return;
             Text = Text.Replace("\u001b", "");
             //AllocConsole();
-            Application.Current.Dispatcher.Invoke((Action)delegate
+            Application.Current.Dispatcher.Invoke(()=>
             {
                 Regex r = new Regex("\\[(\\d+)(;(\\d+))?m", RegexOptions.IgnoreCase);
                 int lastIndex = 0;
-                
+
                 // Match the regular expression pattern against a text string.
                 Match m = r.Match(Text);
                 Match n;
@@ -82,23 +73,18 @@ namespace AppChecker
                     rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd);
                     n = m.NextMatch();
                     lastIndex = m.Index + m.Length;
-                    if (n.Success)
-                    {
-                        rangeOfWord.Text = Text.Substring(lastIndex, n.Index - lastIndex);
-                    } else
-                    {
-                        rangeOfWord.Text = Text.Substring(lastIndex);
-                    }
+                    rangeOfWord.Text = n.Success ? Text.Substring(lastIndex, n.Index - lastIndex) : Text.Substring(lastIndex);
                     rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, (ColorMap[BackgroundColor]));
                     rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, (ColorMap[ForegroundColor]));
                     rangeOfWord.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Regular);
                     Console.WriteLine("ORIG =" + Text);
                     Console.WriteLine("bg=" + BackgroundColor + ",  fr= " + ForegroundColor + ",  text=" + rangeOfWord.Text);
-                    
                     m = n;
                 }
-                rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd);
-                rangeOfWord.Text = Text.Substring(lastIndex) + "\u2028";
+                rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd)
+                {
+                    Text = Text.Substring(lastIndex) + "\u2028"
+                };
                 rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
                 rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
                 richTextBox.ScrollToEnd();
