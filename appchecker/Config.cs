@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization.Json;
+﻿using System.Runtime.Serialization.Json;
 using System.Runtime.Serialization;
 using System.IO;
 using System.ComponentModel;
@@ -89,9 +85,7 @@ namespace AppChecker
 
         private void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            PropertyChangedEventHandler h = PropertyChanged;
-            if (h != null)
-                h(this, e);
+            PropertyChanged?.Invoke(this, e);
         }
     }
 
@@ -100,19 +94,19 @@ namespace AppChecker
         public static CheckerInfo Data = new CheckerInfo();
         public static bool Load()
         {
-            DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(CheckerInfo));
-            FileStream Fs = File.Open("Config.json", FileMode.Open);
-            Data = (CheckerInfo)Serializer.ReadObject(Fs);
-            Fs.Close();
+            using (FileStream Fs = File.Open("Config.json", FileMode.Open))
+            {
+                Data = (CheckerInfo)new DataContractJsonSerializer(typeof(CheckerInfo)).ReadObject(Fs);
+            }
             return true;
         }
 
         public static bool Save()
         {
-            DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(CheckerInfo));
-            FileStream Fs = File.Open("Config.json", FileMode.Create, FileAccess.Write);
-            Serializer.WriteObject(Fs, Data);
-            Fs.Close();
+            using (FileStream Fs = File.Open("Config.json", FileMode.Create, FileAccess.Write))
+            {
+                new DataContractJsonSerializer(typeof(CheckerInfo)).WriteObject(Fs, Data);
+            }
             return true;
         }
     }

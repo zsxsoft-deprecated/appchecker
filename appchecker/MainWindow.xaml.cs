@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-using System.Windows;
+﻿using System.Windows;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
@@ -20,11 +17,7 @@ namespace AppChecker
         {
             InitializeComponent();
             Config.Load();
-            txtPHPPath.DataContext = Config.Data;
-            txtZBPPath.DataContext = Config.Data;
-            txtAppID.DataContext = Config.Data;
-            txtWebsiteUrl.DataContext = Config.Data;
-
+            Grid.DataContext = Config.Data;
             WindowLog.Show();
         }
 
@@ -32,37 +25,39 @@ namespace AppChecker
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             Config.Save();
-            Thread Caller = new Thread((ThreadStart)delegate
+            new Thread(() =>
             {
                 WindowLog.Clear();
-                Process p = new Process();
-                p.StartInfo = new ProcessStartInfo();
-                p.StartInfo.FileName = Config.Data.PHPPath;
-                p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-                p.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(65001); //Utils.GetCodePage());
-                p.StartInfo.EnvironmentVariables["ZBP_PATH"] = Config.Data.ZBPPath;
-                p.StartInfo.EnvironmentVariables["ConEmuANSI"] = "ON";
-                p.StartInfo.EnvironmentVariables["APPCHECKER_GUI_CHARSET"] = "UTF-8";
-                p.StartInfo.Arguments = " checker run " + Config.Data.AppId + " --bloghost=" + Config.Data.WebsiteUrl;
-                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
+                Process p = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = Config.Data.PHPPath,
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        StandardOutputEncoding = Encoding.GetEncoding(65001),//Utils.GetCodePage());
+                        Arguments = $" checker run {Config.Data.AppId} --bloghost={Config.Data.WebsiteUrl}",
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        EnvironmentVariables = { { "ZBP_PATH", Config.Data.ZBPPath }, { "ConEmuANSI", "ON" }, { "APPCHECKER_GUI_CHARSET", "UTF-8" } }
+                    }
+                };
                 p.Start();
                 p.OutputDataReceived += (eventSender, args) => WindowLog.WriteLine(args.Data);
                 p.BeginOutputReadLine();
                 p.WaitForExit();
-            });
-            Caller.Start();
-            
+            }).Start();           
         }
-    
+
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
-            ofd.DefaultExt = ".exe";
-            ofd.Filter = "PHP Execution File|php.exe";
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = ".exe",
+                Filter = "PHP Execution File|php.exe"
+            };
             if (ofd.ShowDialog() == true)
             {
                 if (ofd.FileName != "")
