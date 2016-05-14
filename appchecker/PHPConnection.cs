@@ -41,7 +41,7 @@ namespace AppChecker
             return new ProcessStartInfo
             {
                 FileName = Data.PHPPath,
-                WorkingDirectory = Directory.GetCurrentDirectory(),
+                WorkingDirectory = Utils.ProgramPath,
                 StandardOutputEncoding = Encoding.GetEncoding(65001),//Utils.GetCodePage());
                 Arguments = Argument,
                 WindowStyle = ProcessWindowStyle.Hidden,
