@@ -66,12 +66,12 @@ namespace AppChecker
 
         public static Thread RunChecker(CheckerInfo Data)
         {
-            return new Thread(() => InitializePHPProcess(Data, $"-c \"{Data.PHPIniPath}\" checker run {Data.AppId} --bloghost=\"{Data.WebsiteUrl}\""));
+            return new Thread(() => InitializePHPProcess(Data, $"-c \"{Data.PHPIniPath}\" checker run --bloghost=\"{Data.WebsiteUrl}\" {Data.AppId} "));
         }
 
         public static Thread InstallZBA(CheckerInfo Data, string ZBAPath)
         {
-            return new Thread(() => InitializePHPProcess(Data, $"-c \"{Data.PHPIniPath}\" checker install \"{ZBAPath}\" --bloghost=\"{Data.WebsiteUrl}\""));
+            return new Thread(() => InitializePHPProcess(Data, $"-c \"{Data.PHPIniPath}\" checker install --bloghost=\"{Data.WebsiteUrl}\" \"{ZBAPath}\" "));
         }
     }
 }

@@ -15,10 +15,10 @@ function IncludeFile($path) {
 	}
 }
 /**
- * Get Function Description 
+ * Get Function Description
  */
 function GetFunctionDescription($function) {
-	try	{
+	try {
 		return new \ReflectionFunction($function);
 	} catch (\ReflectionException $e) {
 		echo $e->getMessage();
@@ -53,12 +53,22 @@ function GlobalInclude($__filename__, &$__vars__ = null) {
 	}
 }
 
-function ScanDirectory($path) {
+function ScanDirectory($path, $recursive = true) {
 	$ret = [];
-	$dir = new \RecursiveDirectoryIterator($path);
-	$iterator = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+
+	if ($recursive) {
+		$dir = new \RecursiveDirectoryIterator($path);
+		$iterator = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+	} else {
+		$iterator = new \DirectoryIterator($path);
+	}
 
 	foreach ($iterator as $name => $object) {
+		$fileName = $object->getFilename();
+		if ($fileName == "." || $fileName == "..") {
+			continue;
+		}
+
 		if (!$object->isDir()) {
 			array_push($ret, $object->getPathName());
 		}
