@@ -36,30 +36,42 @@ namespace AppChecker
             if (null != handler) handler(null, args);
         }
 
+        private static ProcessStartInfo InitializeProcessStartInfo(CheckerInfo Data, string Argument)
+        {
+            return new ProcessStartInfo
+            {
+                FileName = Data.PHPPath,
+                WorkingDirectory = Directory.GetCurrentDirectory(),
+                StandardOutputEncoding = Encoding.GetEncoding(65001),//Utils.GetCodePage());
+                Arguments = Argument,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                EnvironmentVariables = { { "ZBP_PATH", Data.ZBPPath }, { "ConEmuANSI", "ON" }, { "APPCHECKER_GUI_CHARSET", "UTF-8" } }
+            };
+        }
+        private static Process InitializePHPProcess(CheckerInfo Data, string Argument)
+        {
+            var p = new Process
+            {
+                StartInfo = InitializeProcessStartInfo(Data, Argument),
+            };
+            p.Start();
+            p.OutputDataReceived += (eventSender, args) => ReceivedLog(args.Data);
+            p.BeginOutputReadLine();
+            p.WaitForExit();
+            return p;
+        }
+
         public static Thread RunChecker(CheckerInfo Data)
         {
-            return new Thread(() =>
-            {
-                var p = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = Data.PHPPath,
-                        WorkingDirectory = Directory.GetCurrentDirectory(),
-                        StandardOutputEncoding = Encoding.GetEncoding(65001),//Utils.GetCodePage());
-                        Arguments = $"-c \"{Data.PHPIniPath}\" checker run {Data.AppId} --bloghost=\"{Data.WebsiteUrl}\"",
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
-                        EnvironmentVariables = { { "ZBP_PATH", Data.ZBPPath }, { "ConEmuANSI", "ON" }, { "APPCHECKER_GUI_CHARSET", "UTF-8" } }
-                    }
-                };
-                p.Start();
-                p.OutputDataReceived += (eventSender, args) => ReceivedLog(args.Data);//WindowLog.WriteLine(args.Data);
-                p.BeginOutputReadLine();
-                p.WaitForExit();
-            });
+            return new Thread(() => InitializePHPProcess(Data, $"-c \"{Data.PHPIniPath}\" checker run {Data.AppId} --bloghost=\"{Data.WebsiteUrl}\""));
+        }
+
+        public static Thread InstallZBA(CheckerInfo Data, string ZBAPath)
+        {
+            return new Thread(() => InitializePHPProcess(Data, $"-c \"{Data.PHPIniPath}\" checker install \"{ZBAPath}\" --bloghost=\"{Data.WebsiteUrl}\""));
         }
     }
 }

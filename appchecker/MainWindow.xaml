@@ -41,7 +41,7 @@
                VerticalAlignment="Center"
                Grid.Row="3"
                Grid.Column="0"/>
-        <Label Content="App ID"
+        <Label Content="AppID或zba文件"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                Grid.Row="4" 
@@ -107,13 +107,25 @@
                  TextWrapping="Wrap" 
                  Margin="10,14" 
                  Text="{Binding Path=WebsiteUrl, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox x:Name="txtAppID" 
-                 Grid.Column="1" 
-                 Grid.Row="4"
+        <Grid Grid.Row="4" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="txtAppID" 
+                 Grid.Column="0" 
                  VerticalAlignment="Center"
                  TextWrapping="Wrap"
                  Margin="10,14" 
                  Text="{Binding Path=AppId, UpdateSourceTrigger=PropertyChanged}" />
+            <Button x:Name="btnBrowseZBA"
+                    Content="浏览(_W)"
+                    Grid.Column="1" 
+                    VerticalAlignment="Center"
+                    Margin="10,14" 
+                    Click="btnBrowseZBA_Click" />
+        </Grid>
+
         <Button Grid.Row="5"  
                 Grid.Column="0" 
                 Grid.ColumnSpan="2" 

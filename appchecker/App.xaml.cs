@@ -13,5 +13,6 @@ namespace AppChecker
     /// </summary>
     public partial class App : Application
     {
+
     }
 }
