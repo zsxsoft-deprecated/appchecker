@@ -81,6 +81,25 @@ namespace AppChecker
             }
         }
 
+        private string _PHPIniPath;
+        /// <summary>
+        /// Gets or sets php.ini Path.
+        /// </summary>
+        [DataMember]
+        public string PHPIniPath
+        {
+            get
+            {
+                return _PHPIniPath;
+            }
+            set
+            {
+                if (_PHPIniPath == value) return;
+                _PHPIniPath = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("PHPIniPath"));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(PropertyChangedEventArgs e)

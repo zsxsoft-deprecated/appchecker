@@ -35,7 +35,7 @@ namespace AppChecker
                         FileName = Config.Data.PHPPath,
                         WorkingDirectory = Directory.GetCurrentDirectory(),
                         StandardOutputEncoding = Encoding.GetEncoding(65001),//Utils.GetCodePage());
-                        Arguments = $" checker run {Config.Data.AppId} --bloghost={Config.Data.WebsiteUrl}",
+                        Arguments = $"-c \"{Config.Data.PHPIniPath}\" checker run {Config.Data.AppId} --bloghost=\"{Config.Data.WebsiteUrl}\"",
                         WindowStyle = ProcessWindowStyle.Hidden,
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
@@ -76,6 +76,22 @@ namespace AppChecker
                 if (ofd.SelectedPath != "")
                 {
                     Config.Data.ZBPPath = ofd.SelectedPath;
+                }
+            }
+        }
+
+        private void btnBrowsePHPIni_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = "php.ini",
+                Filter = "php.ini|php.ini"
+            };
+            if (ofd.ShowDialog() == true)
+            {
+                if (ofd.FileName != "")
+                {
+                    Config.Data.PHPIniPath = ofd.FileName;
                 }
             }
         }
