@@ -25,7 +25,7 @@ namespace AppChecker
 
             // Get Environment Line
             var envArg = Environment.GetCommandLineArgs();
-            if (envArg.Length > 0)
+            if (envArg.Length > 1)
             {
                 Config.Data.AppId = envArg[1];
             }
