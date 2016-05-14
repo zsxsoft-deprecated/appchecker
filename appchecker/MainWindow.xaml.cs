@@ -102,7 +102,7 @@ namespace AppChecker
             if (!FileAssociation.IsAssociated(".zba"))
             {
                 try {
-                    FileAssociation.Associate(".zba", "zblogcn.zba", "Z-Blog Packed App", $"{appPath}/app.ico", $"{appPath}/AppChecker.exe");
+                    FileAssociation.Associate(".zba", "zblogcn.zba", "Z-Blog Packed App", $"{appPath}/Logo.ico", $"{appPath}/AppChecker.exe");
                     MessageBox.Show("关联成功", "AppChecker", MessageBoxButton.OK, MessageBoxImage.Information);
                 } catch (System.Exception ex)
                 {

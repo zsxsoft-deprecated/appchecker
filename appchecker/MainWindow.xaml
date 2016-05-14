@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AppChecker"
         mc:Ignorable="d"
-        Title="AppChecker for Z-BlogPHP" Height="350" Width="689">
+        Title="AppChecker for Z-BlogPHP" Height="350" Width="689" Icon="Logo.ico">
     <Grid x:Name="Grid">
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -123,7 +123,7 @@
         </Button>
         <Grid Grid.Row="6" Margin="0,10,0,0">
             <Button x:Name="btnFileAsso" Content="与.zba文件关联" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Click="btnFileAsso_Click"/>
-            <Button x:Name="btnCancelFileAsso" Content="取消文件关联" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="140,0,-130,0"/>
+            <Button x:Name="btnCancelFileAsso" Content="取消文件关联" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="110" Margin="140,0,-130,1" Click="btnCancelFileAsso_Click"/>
 
         </Grid>
     </Grid>

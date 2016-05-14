@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AppChecker"
         mc:Ignorable="d"
-        Title="Log" Height="307" Width="724">
+        Title="Log" Height="307" Width="724" Icon="Logo.ico">
     <Grid>
         <RichTextBox x:Name="richTextBox" Background="Black" FontSize="16" FontFamily="Consolas" VerticalScrollBarVisibility="Visible">
             <FlowDocument>
