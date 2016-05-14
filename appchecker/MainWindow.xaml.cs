@@ -95,5 +95,35 @@ namespace AppChecker
                 }
             }
         }
+
+        private void btnFileAsso_Click(object sender, RoutedEventArgs e)
+        {
+            string appPath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            if (!FileAssociation.IsAssociated(".zba"))
+            {
+                try {
+                    FileAssociation.Associate(".zba", "zblogcn.zba", "Z-Blog Packed App", $"{appPath}/app.ico", $"{appPath}/AppChecker.exe");
+                    MessageBox.Show("关联成功", "AppChecker", MessageBoxButton.OK, MessageBoxImage.Information);
+                } catch (System.Exception ex)
+                {
+                    WindowLog.WriteLine(ex.ToString());
+                    MessageBox.Show("关联失败\n\n请以管理员权限启动程序再试", "AppChecker", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void btnCancelFileAsso_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                FileAssociation.Unassociate(".zba");
+                MessageBox.Show("取消关联成功", "AppChecker", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (System.Exception ex)
+            {
+                WindowLog.WriteLine(ex.ToString());
+                MessageBox.Show("取消关联失败\n\n请以管理员权限启动程序再试", "AppChecker", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
