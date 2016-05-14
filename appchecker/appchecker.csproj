@@ -78,6 +78,7 @@
     </ApplicationDefinition>
     <Compile Include="Config.cs" />
     <Compile Include="FileAssociation.cs" />
+    <Compile Include="PHPConnection.cs" />
     <Compile Include="Utils.cs" />
     <Page Include="Log.xaml">
       <SubType>Designer</SubType>

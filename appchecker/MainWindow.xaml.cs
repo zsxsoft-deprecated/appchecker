@@ -19,35 +19,15 @@ namespace AppChecker
             Config.Load();
             Grid.DataContext = Config.Data;
             WindowLog.Show();
+            PHPConnection.OnLogReceived += (eventSender, args) => WindowLog.WriteLine(args.Data);
         }
 
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             Config.Save();
-            new Thread(() =>
-            {
-                WindowLog.Clear();
-                Process p = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = Config.Data.PHPPath,
-                        WorkingDirectory = Directory.GetCurrentDirectory(),
-                        StandardOutputEncoding = Encoding.GetEncoding(65001),//Utils.GetCodePage());
-                        Arguments = $"-c \"{Config.Data.PHPIniPath}\" checker run {Config.Data.AppId} --bloghost=\"{Config.Data.WebsiteUrl}\"",
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
-                        EnvironmentVariables = { { "ZBP_PATH", Config.Data.ZBPPath }, { "ConEmuANSI", "ON" }, { "APPCHECKER_GUI_CHARSET", "UTF-8" } }
-                    }
-                };
-                p.Start();
-                p.OutputDataReceived += (eventSender, args) => WindowLog.WriteLine(args.Data);
-                p.BeginOutputReadLine();
-                p.WaitForExit();
-            }).Start();           
+            WindowLog.Clear();
+            PHPConnection.RunChecker(Config.Data).Start();         
         }
 
 
@@ -98,11 +78,10 @@ namespace AppChecker
 
         private void btnFileAsso_Click(object sender, RoutedEventArgs e)
         {
-            string appPath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             if (!FileAssociation.IsAssociated(".zba"))
             {
                 try {
-                    FileAssociation.Associate(".zba", "zblogcn.zba", "Z-Blog Packed App", $"{appPath}/Logo.ico", $"{appPath}/AppChecker.exe");
+                    FileAssociation.Associate(".zba", "zblogcn.zba", "Z-Blog Packed App", $"{Utils.ProgramPath}\\Logo.ico", $"{Utils.ProgramPath}\\AppChecker.exe");
                     MessageBox.Show("关联成功", "AppChecker", MessageBoxButton.OK, MessageBoxImage.Information);
                 } catch (System.Exception ex)
                 {

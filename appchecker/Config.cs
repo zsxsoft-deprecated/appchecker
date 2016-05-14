@@ -113,7 +113,7 @@ namespace AppChecker
         public static CheckerInfo Data = new CheckerInfo();
         public static bool Load()
         {
-            using (FileStream Fs = File.Open("Config.json", FileMode.Open))
+            using (FileStream Fs = File.Open($"{Utils.ProgramPath}/Config.json", FileMode.Open))
             {
                 Data = (CheckerInfo)new DataContractJsonSerializer(typeof(CheckerInfo)).ReadObject(Fs);
             }
@@ -122,7 +122,7 @@ namespace AppChecker
 
         public static bool Save()
         {
-            using (FileStream Fs = File.Open("Config.json", FileMode.Create, FileAccess.Write))
+            using (FileStream Fs = File.Open($"{Utils.ProgramPath}/Config.json", FileMode.Create, FileAccess.Write))
             {
                 new DataContractJsonSerializer(typeof(CheckerInfo)).WriteObject(Fs, Data);
             }
