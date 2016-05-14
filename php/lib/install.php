@@ -28,7 +28,14 @@ class Install extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+		$appPath = $input->getArgument("zbapath");
 		Log::SetOutputInterface($output);
-		MainFunc::installApp($input->getArgument("zbapath"), $input->getOption("bloghost"));
+		$appId = MainFunc::installApp($appPath);
+		if ($appId == false) {
+			Log::Info("Extract " . $appPath . " failed!");
+			return;
+		}
+		Log::Log("Extracted: " . $appId);
+		MainFunc::testApp($appId, $input->getOption("bloghost"));
 	}
 }
