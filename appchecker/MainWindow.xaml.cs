@@ -111,8 +111,8 @@ namespace AppChecker
 
         private void btnFileAsso_Click(object sender, RoutedEventArgs e)
         {
-            if (!FileAssociation.IsAssociated(".zba"))
-            {
+            //if (!FileAssociation.IsAssociated(".zba"))
+            //{
                 try {
                     FileAssociation.Associate(".zba", "zblogcn.zba", "Z-Blog Packed App", $"{Utils.ProgramPath}\\Logo.ico", $"{Utils.ProgramPath}\\AppChecker.exe");
                     MessageBox.Show("关联成功", "AppChecker", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -121,7 +121,7 @@ namespace AppChecker
                     WindowLog.WriteLine(ex.ToString());
                     MessageBox.Show("关联失败\n\n请以管理员权限启动程序再试", "AppChecker", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
+            //}
         }
 
         private void btnCancelFileAsso_Click(object sender, RoutedEventArgs e)
