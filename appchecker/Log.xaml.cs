@@ -29,8 +29,8 @@ namespace AppChecker
 
         public void Clear()
         {
-                richTextBox.SelectAll();
-                richTextBox.Selection.Text = "";
+                RichTextBox.SelectAll();
+                RichTextBox.Selection.Text = "";
         }
 
         [System.Runtime.InteropServices.DllImport("kernel32")]
@@ -47,44 +47,44 @@ namespace AppChecker
             //AllocConsole();
             this.Dispatcher.Invoke(new Action(()=>
             {
-                Regex r = new Regex("\\[(\\d+)(;(\\d+))?m", RegexOptions.IgnoreCase);
+                Regex MatchRegex = new Regex("\\[(\\d+)(;(\\d+))?m", RegexOptions.IgnoreCase);
                 int lastIndex = 0;
 
                 // Match the regular expression pattern against a text string.
-                Match m = r.Match(Text);
-                Match n;
-                TextRange rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd);
+                Match TextMatch = MatchRegex.Match(Text);
+                Match NextMatch;
+                TextRange RangeForNewText = new TextRange(RichTextBox.Document.ContentEnd, RichTextBox.Document.ContentEnd);
                 int BackgroundColor = 255;
                 int ForegroundColor = 0;
                 Console.WriteLine(Text);
-                if (m.Success)
+                if (TextMatch.Success)
                 {
-                    rangeOfWord.Text = Text.Substring(0, m.Index);
+                    RangeForNewText.Text = Text.Substring(0, TextMatch.Index);
                 }
-                while (m.Success)
+                while (TextMatch.Success)
                 {
-                    BackgroundColor = Convert.ToInt32(m.Groups[3].Value != "" ? m.Groups[3].Value : "0"); // ;number
-                    ForegroundColor = Convert.ToInt32(m.Groups[1].Value);
+                    BackgroundColor = Convert.ToInt32(TextMatch.Groups[3].Value != "" ? TextMatch.Groups[3].Value : "0"); // ;number
+                    ForegroundColor = Convert.ToInt32(TextMatch.Groups[1].Value);
                     BackgroundColor = BackgroundColor == 0 ? BackgroundColor : Math.Abs((BackgroundColor - 40) % 7);
                     ForegroundColor = ForegroundColor == 0 ? ForegroundColor : Math.Abs((ForegroundColor - 30) % 7);
-                    rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd);
-                    n = m.NextMatch();
-                    lastIndex = m.Index + m.Length;
-                    rangeOfWord.Text = n.Success ? Text.Substring(lastIndex, n.Index - lastIndex) : Text.Substring(lastIndex);
-                    rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, (ColorMap[BackgroundColor]));
-                    rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, (ColorMap[ForegroundColor]));
-                    rangeOfWord.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Regular);
+                    RangeForNewText = new TextRange(RichTextBox.Document.ContentEnd, RichTextBox.Document.ContentEnd);
+                    NextMatch = TextMatch.NextMatch();
+                    lastIndex = TextMatch.Index + TextMatch.Length;
+                    RangeForNewText.Text = NextMatch.Success ? Text.Substring(lastIndex, NextMatch.Index - lastIndex) : Text.Substring(lastIndex);
+                    RangeForNewText.ApplyPropertyValue(TextElement.BackgroundProperty, (ColorMap[BackgroundColor]));
+                    RangeForNewText.ApplyPropertyValue(TextElement.ForegroundProperty, (ColorMap[ForegroundColor]));
+                    //rangeOfWord.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Regular);
                     Console.WriteLine("ORIG =" + Text);
-                    Console.WriteLine("bg=" + BackgroundColor + ",  fr= " + ForegroundColor + ",  text=" + rangeOfWord.Text);
-                    m = n;
+                    Console.WriteLine("bg =" + BackgroundColor + ",  fr = " + ForegroundColor + ",  text =" + RangeForNewText.Text);
+                    TextMatch = NextMatch;
                 }
-                rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd)
+                RangeForNewText = new TextRange(RichTextBox.Document.ContentEnd, RichTextBox.Document.ContentEnd)
                 {
-                    Text = Text.Substring(lastIndex) + System.Environment.NewLine
+                    Text = Text.Substring(lastIndex) + "\u2028"//System.Environment.NewLine
                 };
-                rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
-                rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
-                richTextBox.ScrollToEnd();
+                RangeForNewText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
+                RangeForNewText.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
+                RichTextBox.ScrollToEnd();
             }));
         }
     }

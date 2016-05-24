@@ -34,6 +34,7 @@ class GlobalVariables {
 		global $app;
 		Log::Log('Testing functions');
 		$regex = str_replace("!!", $app->id, "/^(activeplugin_|installplugin_|uninstallplugin_)!!$|^!!_|^!!$/si");
+		//var_dump($diff);exit;
 		foreach ($diff as $index => $name) {
 			if (preg_match($regex, $name)) {
 				Log::Log('Tested function: ' . $name);
@@ -72,9 +73,9 @@ class GlobalVariables {
  */
 	public static function CheckDiff($class) {
 		$diff = self::DiffGlobals($class);
-		$function = __NAMESPACE__ . '\\Check' . ucfirst($class);
-		if (function_exists($function)) {
-			return $function($diff);
+		$function = 'Check' . ucfirst($class);
+		if (method_exists(__CLASS__, $function)) {
+			return call_user_func(array(__CLASS__, $function), $diff);
 		}
 		return self::CheckOthers($class, $diff);
 	}
