@@ -9,7 +9,7 @@ class Plugin {
 /**
  * Check CUrl
  */
-	public static function CheckUnsafeFunctions() {
+	public function CheckUnsafeFunctions() {
 		global $file;
 		global $path;
 		if (!preg_match('/\.php$/i', $path)) {
@@ -26,7 +26,7 @@ class Plugin {
 /**
  * Check Order By Rand
  */
-	public static function CheckOrderByRand() {
+	public function CheckOrderByRand() {
 		global $file;
 		global $path;
 		$regex = "/[\"']rand\(\)[\"'][ \t]*?\=\>[\"'][ \t]*?[\"']|ORDER[ \t]*BY[\t ]*rand\(/i";
@@ -39,7 +39,7 @@ class Plugin {
 /**
  * Check CUrl
  */
-	public static function CheckCurl() {
+	public function CheckCurl() {
 		global $file;
 		global $path;
 		$regex = "/curl_init/i";
@@ -53,20 +53,20 @@ class Plugin {
  * Run Checker
  * @param string $path
  */
-	public static function RunChecker($filePath) {
+	public function RunChecker($filePath) {
 		global $file;
 		global $path;
 		$path = $filePath;
 		$file = file_get_contents($path);
-		self::CheckCurl();
-		self::CheckOrderByRand();
-		self::CheckUnsafeFunctions();
+		$this->CheckCurl();
+		$this->CheckOrderByRand();
+		$this->CheckUnsafeFunctions();
 
 	}
 /**
  * Run
  */
-	public static function Run() {
+	public function Run() {
 		global $zbp;
 		global $app;
 
@@ -74,7 +74,7 @@ class Plugin {
 		// Log::Log('Scanning useless jQuery');
 		$templateDir = $zbp->path . 'zb_users/' . $app->type . '/' . $app->id;
 		foreach (\AppChecker\Utils::ScanDirectory($templateDir) as $index => $value) {
-			self::RunChecker($value);
+			$this->RunChecker($value);
 		}
 
 	}

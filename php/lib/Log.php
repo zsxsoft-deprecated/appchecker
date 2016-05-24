@@ -69,7 +69,7 @@ class Log {
 	 */
 	public static function Line($flush = true) {
 
-		self::Echo (PHP_EOL, $flush);
+		self::Write(PHP_EOL, $flush);
 
 	}
 	/**
@@ -79,14 +79,14 @@ class Log {
 	public static function Log($text, $flush = true) {
 
 		$text = "[" . date("Y/m/d h:i:s a") . "] " . $text;
-		self::Echo ($text, $flush);
+		self::Write($text, $flush);
 
 	}
 
 	/**
 	 * Directly Echo
 	 */
-	public static function Echo ($text, $flush = true) {
+	public static function Write($text, $flush = true) {
 
 		if (defined('PHP_SYSTEM')) {
 			if (PHP_SYSTEM === SYSTEM_WINDOWS && getenv("APPCHECKER_GUI_CHARSET") != "UTF-8") {

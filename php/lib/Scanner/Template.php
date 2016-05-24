@@ -3,14 +3,27 @@ namespace AppChecker\Scanner;
 use AppChecker\Log as Log;
 use AppChecker\Utils;
 
-$file = "";
-$path = "";
-
 class Template {
-/**
- * Validate W3C
- */
-	public static function ValidateW3C($url) {
+	private $file = "";
+	private $path = "";
+	private $forbiddenAsToken = [
+		'title',
+		'article',
+		'search',
+		'articles',
+		'type',
+		'page',
+		'pagebar',
+		'comments',
+		'date',
+		'tag',
+		'author',
+		'category',
+	];
+	/**
+	 * Validate W3C
+	 */
+	public function ValidateW3C($url) {
 		Log::Log('Testing ' . $url);
 		ob_flush();
 		$validator = new \W3C\HtmlValidator();
@@ -20,35 +33,38 @@ class Template {
 			Log::Info('Validation successful');
 		} else {
 			foreach ($result->getErrors() as $error) {
-				self::DisplayErrors($error, 'Error');
+				$this->DisplayErrors($error, 'Error');
 			}
 			foreach ($result->getWarnings() as $warning) {
-				self::DisplayErrors($warning, 'Warning');
+				$this->DisplayErrors($warning, 'Warning');
 			}
 			Log::Warning('Validation failed: ' . $result->getErrorCount() . " error(s) and " . $result->getWarningCount() . ' warning(s).');
 		}
 	}
-/**
- * Check Useless jQuery
- */
-	public static function CheckUselessJQuery() {
-		global $file;
-		global $path;
+	/**
+	 * Check Useless jQuery
+	 */
+	public function CheckUselessJQuery() {
 		$regex = "/src=[\"'](((?!zb_system).)*?jquery[\.0-9\-]*?(min)?\.js)[\"']/i";
 		$matches = null;
-		if (preg_match($regex, $file, $matches)) {
-			Log::Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $path);
+		if (preg_match($regex, $this->file, $matches)) {
+			Log::Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $this->path);
 		}
 	}
+	/**
+	 * Check Useless jQuery
+	 */
+	public function CheckAs() {
 
-	public static function DisplayErrors($object, $type) {
+	}
+	public function DisplayErrors($object, $type) {
 		$function = ucfirst($type);
 		Log::$function('In Line ' . $object->getLine() . ', Col ' . $object->getColumn() . ", " . str_replace("\n", "", $object->getMessage()), false);
-		Log::Echo ($object->getSource());
+		Log::Write($object->getSource());
 		Log::Line();
 	}
 
-	public static function CheckW3C() {
+	public function CheckW3C() {
 		global $zbp;
 		global $app;
 		Log::Log("Checking W3C...");
@@ -67,7 +83,7 @@ class Template {
 		$zbp->SaveConfig('system');
 
 		Log::Log("Validating INDEX");
-		self::ValidateW3C($zbp->host);
+		$this->ValidateW3C($zbp->host);
 		//Log::Log("Validating ?id=1");
 		//ValidateW3C(str_replace('//?', '/?', $zbp->host . "/?id=1"));
 
@@ -76,21 +92,20 @@ class Template {
 		$zbp->Config('system')->ZC_BLOG_CSS = $origCSS;
 		$zbp->SaveConfig('system');
 	}
-/**
- * Run Checker
- * @param string $path
- */
-	public static function RunChecker($filePath) {
-		global $file;
-		global $path;
-		$path = $filePath;
-		$file = file_get_contents($path);
-		self::CheckUselessJQuery();
+	/**
+	 * Run Checker
+	 * @param string $path
+	 */
+	public function RunChecker($filePath) {
+		$this->path = $filePath;
+		$this->file = file_get_contents($this->path);
+		$this->CheckUselessJQuery();
+		$this->CheckAs();
 	}
-/**
- * Run
- */
-	public static function Run() {
+	/**
+	 * Run
+	 */
+	public function Run() {
 		global $zbp;
 		global $app;
 
@@ -102,10 +117,10 @@ class Template {
 		// Log::Log('Scanning useless jQuery');
 		$templateDir = $zbp->path . 'zb_users/theme/' . $app->id . '/template/';
 		foreach (Utils::ScanDirectory($templateDir) as $index => $value) {
-			self::RunChecker($value);
+			$this->RunChecker($value);
 		}
 
-		self::CheckW3C();
+		$this->CheckW3C();
 	}
 
 }

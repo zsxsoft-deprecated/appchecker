@@ -78,4 +78,7 @@ class Utils {
 		return $ret;
 	}
 
+	public static function CheckCanBeString($obj) {
+		return $obj === null || is_scalar($obj) || is_callable([$obj, '__toString']);
+	}
 }

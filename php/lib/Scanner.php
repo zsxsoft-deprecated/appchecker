@@ -5,6 +5,7 @@ use AppChecker\Utils;
 
 class Scanner {
 	public $scanners = [];
+	public $classCached = [];
 
 	public function __construct() {
 		foreach (Utils::ScanDirectory(dirname(__FILE__) . '/scanner/', false, 'getBaseName') as $index => $value) {
@@ -13,7 +14,10 @@ class Scanner {
 	}
 	public function Run() {
 		foreach ($this->scanners as $index => $class) {
-			$class::Run();
+			if (!isset($this->classCached[$class])) {
+				$this->classCached[$class] = new $class;
+			}
+			$this->classCached[$class]->Run();
 		}
 	}
 }

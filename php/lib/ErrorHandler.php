@@ -1,6 +1,7 @@
 <?php
 namespace AppChecker;
 use AppChecker\Log;
+use AppChecker\Utils;
 
 class ErrorHandler {
 
@@ -30,7 +31,7 @@ class ErrorHandler {
 			echo $sData['function'] . '(';
 			if (isset($sData['args'])) {
 				foreach ($sData['args'] as $argKey => $argVal) {
-					echo $argKey . ' => ' . (\CheckCanBeString($argVal) ? htmlspecialchars((string) $argVal) : 'Object') . ',';
+					echo $argKey . ' => ' . (Utils::CheckCanBeString($argVal) ? htmlspecialchars((string) $argVal) : 'Object') . ',';
 				}
 			}
 			echo ")\n\n\n";
