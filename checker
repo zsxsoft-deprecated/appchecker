@@ -17,6 +17,7 @@ if (!is_readable('vendor/autoload.php')) {
 // Mock
 $_SERVER["QUERY_STRING"] = "";
 $_SERVER["HTTP_HOST"] = "http://localhost";
+define('ZBP_HOOKERROR', true);
 
 require 'vendor/autoload.php';
 require './bootstrap.php';
