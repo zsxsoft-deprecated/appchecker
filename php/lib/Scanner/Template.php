@@ -44,6 +44,8 @@ class Template {
 	public static function DisplayErrors($object, $type) {
 		$function = ucfirst($type);
 		Log::$function('In Line ' . $object->getLine() . ', Col ' . $object->getColumn() . ", " . str_replace("\n", "", $object->getMessage()), false);
+		Log::Echo ($object->getSource());
+		Log::Line();
 	}
 
 	public static function CheckW3C() {
@@ -88,7 +90,7 @@ class Template {
 /**
  * Run
  */
-	function Run() {
+	public static function Run() {
 		global $zbp;
 		global $app;
 

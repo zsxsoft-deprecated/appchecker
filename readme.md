@@ -11,16 +11,18 @@ cmd: ``SET ZBP_PATH=YOUR_ZBP_PATH``
 ### 检测已安装的应用
 
 cmd: ``php checker run --bloghost=[YOUR_BLOG_HOST] [YOUR_APP_ID]``
+
 sh: ``ZBP_PATH=YOUR_ZBP_PATH php checker run --bloghost=[YOUR_BLOG_HOST] [YOUR_APP_ID]``
 
 ### 解压并检测应用
 
 cmd: ``php checker install --bloghost=[YOUR_BLOG_HOST] [YOUR_ZBA_PATH]``
+
 sh: ``ZBP_PATH=YOUR_ZBP_PATH php checker install--bloghost=[YOUR_BLOG_HOST] [YOUR_ZBA_PATH]``
 
 
 ## 环境要求
-GUI: Windows + .NET Framework 4.5
+GUI: Windows + .NET Framework 4.0
 
 命令行：PHP 5.4+
 

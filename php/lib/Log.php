@@ -62,6 +62,16 @@ class Log {
 		self::$outputInterface->writeln(str_repeat(" ", (strlen($boundary) - strlen($text)) / 2) . $text);
 		self::$outputInterface->writeln($boundary);
 	}
+
+	/**
+	 * Log
+	 * @param string $text
+	 */
+	public static function Line($flush = true) {
+
+		self::Echo (PHP_EOL, $flush);
+
+	}
 	/**
 	 * Log
 	 * @param string $text
@@ -69,6 +79,15 @@ class Log {
 	public static function Log($text, $flush = true) {
 
 		$text = "[" . date("Y/m/d h:i:s a") . "] " . $text;
+		self::Echo ($text, $flush);
+
+	}
+
+	/**
+	 * Directly Echo
+	 */
+	public static function Echo ($text, $flush = true) {
+
 		if (defined('PHP_SYSTEM')) {
 			if (PHP_SYSTEM === SYSTEM_WINDOWS && getenv("APPCHECKER_GUI_CHARSET") != "UTF-8") {
 				$text = iconv("UTF-8", "gbk", $text);
@@ -85,7 +104,6 @@ class Log {
 		} else {
 			self::$outputInterface->writeln($text);
 		}
-
 	}
 
 	/**
