@@ -29,11 +29,8 @@ namespace AppChecker
 
         public void Clear()
         {
-            Application.Current.Dispatcher.Invoke(()=>
-            {
                 richTextBox.SelectAll();
                 richTextBox.Selection.Text = "";
-            });
         }
 
         [System.Runtime.InteropServices.DllImport("kernel32")]
@@ -48,7 +45,7 @@ namespace AppChecker
             if (string.IsNullOrEmpty(Text)) return;
             Text = Text.Replace("\u001b", "");
             //AllocConsole();
-            Application.Current.Dispatcher.Invoke(()=>
+            this.Dispatcher.Invoke(new Action(()=>
             {
                 Regex r = new Regex("\\[(\\d+)(;(\\d+))?m", RegexOptions.IgnoreCase);
                 int lastIndex = 0;
@@ -88,7 +85,7 @@ namespace AppChecker
                 rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
                 rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
                 richTextBox.ScrollToEnd();
-            });
+            }));
         }
     }
 }
