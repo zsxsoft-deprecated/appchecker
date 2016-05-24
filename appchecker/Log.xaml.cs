@@ -80,7 +80,7 @@ namespace AppChecker
                 }
                 rangeOfWord = new TextRange(richTextBox.Document.ContentEnd, richTextBox.Document.ContentEnd)
                 {
-                    Text = Text.Substring(lastIndex) + "\u2028"
+                    Text = Text.Substring(lastIndex) + System.Environment.NewLine
                 };
                 rangeOfWord.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
                 rangeOfWord.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
