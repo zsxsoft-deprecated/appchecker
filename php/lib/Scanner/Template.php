@@ -61,7 +61,7 @@ class Template {
 		$regex = "/src=[\"'](((?!zb_system).)*?jquery[\.0-9\-]*?(min)?\.js)[\"']/i";
 		$matches = null;
 		if (preg_match($regex, $this->file, $matches)) {
-			Log::Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $this->path);
+			Log::Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $this->path, false);
 		}
 	}
 	/**
@@ -150,7 +150,7 @@ class Template {
 			$this->RunChecker($value);
 		}
 
-		//$this->CheckW3C();
+		$this->CheckW3C();
 	}
 
 }
