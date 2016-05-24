@@ -6,6 +6,7 @@
  * @php >= 5.3
  */
 namespace AppChecker;
+use AppChecker\ErrorHandler;
 use AppChecker\Install;
 use AppChecker\Log;
 use AppChecker\Run;
@@ -31,7 +32,7 @@ require 'zb_system/function/c_system_base.php';
 Log::Log('Loading Z-BlogPHP...', false);
 $zbp->Load();
 \ZBlogException::ClearErrorHook();
-
+ErrorHandler::Hook();
 ob_flush();
 
 $application = new Application();
