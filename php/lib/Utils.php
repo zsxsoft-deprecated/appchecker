@@ -53,7 +53,7 @@ function GlobalInclude($__filename__, &$__vars__ = null) {
 	}
 }
 
-function ScanDirectory($path, $recursive = true) {
+function ScanDirectory($path, $recursive = true, $returnType = "getPathName") {
 	$ret = [];
 
 	if ($recursive) {
@@ -70,7 +70,7 @@ function ScanDirectory($path, $recursive = true) {
 		}
 
 		if (!$object->isDir()) {
-			array_push($ret, $object->getPathName());
+			array_push($ret, $object->$returnType());
 		}
 	}
 

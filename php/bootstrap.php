@@ -10,18 +10,25 @@ use AppChecker\Install;
 use AppChecker\Log;
 use AppChecker\Run;
 use Symfony\Component\Console\Application;
-require './lib/utils.php';
-foreach (\AppChecker\Utils\ScanDirectory(dirname(__FILE__) . '/lib/', false) as $index => $value) {
-	require_once $value;
-}
+
+spl_autoload_register(function ($class) {
+	$className = str_replace('\\', '/', str_replace('AppChecker\\', '', $class));
+	$fileName = '/lib/' . $className . '.php';
+
+	if (is_readable(dirname(__FILE__) . $fileName)) {
+		var_dump($fileName);
+		include $fileName;
+	}
+
+});
 
 $path = getenv('ZBP_PATH');
 if (!is_dir($path) || !chdir($path)) {
 	echo 'Cannot open your Z-BlogPHP index.php: ' . $path;
 	exit;
 }
-require 'zb_system/function/c_system_base.php';
 
+require 'zb_system/function/c_system_base.php';
 Log::Log('Loading Z-BlogPHP...');
 $zbp->Load();
 \ZBlogException::ClearErrorHook();
