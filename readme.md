@@ -34,6 +34,7 @@ http://wiki.zblogcn.com/doku.php?id=app:auditstandard
 1. \* [在数据库内使用rand函数](http://bbs.zblogcn.com/forum.php?mod=viewthread&tid=90433&extra=)
 1. \* （主题）重复的jQuery（系统已自带，非特殊情况，不允许再引用jQuery）
 1. \* （主题）首页W3C验证（主要用于检测未闭合标签）
+1. \* （主题）可能会导致BUG的foreach as变量
 1. \* curl等网络类函数使用（应使用系统的``Network``类替代）
 1. \* eval、system等函数
 

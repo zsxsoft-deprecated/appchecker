@@ -6,20 +6,33 @@ use AppChecker\Utils;
 class Template {
 	private $file = "";
 	private $path = "";
-	private $forbiddenAsToken = [
-		'title',
-		'article',
-		'search',
-		'articles',
-		'type',
-		'page',
-		'pagebar',
-		'comments',
-		'date',
-		'tag',
-		'author',
-		'category',
-	];
+	private $forbiddenAsToken = [];
+
+	public function __construct() {
+		$fba = &$this->forbiddenAsToken;
+		$fba['index'] = [
+			'title',
+			'articles',
+			'pagebar',
+			'type',
+			'page',
+			'date',
+			'tag',
+			'author',
+			'category',
+		];
+		$fba['single'] = [
+			'title',
+			'article',
+			'type',
+			'page',
+			'pagebar',
+			'comments',
+		];
+		$fba['comments'] = &$fba['single'];
+		$fba['comment'] = &$fba['single'];
+	}
+
 	/**
 	 * Validate W3C
 	 */
@@ -52,10 +65,27 @@ class Template {
 		}
 	}
 	/**
-	 * Check Useless jQuery
+	 * Check Error `As`
 	 */
 	public function CheckAs() {
+		$filename = basename($this->path, '.php');
+		$regex = '/\\{foreach.+?as(\s+?)\\$(.+?)\s*?\\}/i';
+		$path = $this->path;
 
+		if (!isset($this->forbiddenAsToken[$filename])) {
+			return;
+		}
+
+		if (preg_match_all($regex, $this->file, $matches)) {
+			array_walk($matches[2], function ($asName, $key) use ($matches, $path, $filename) {
+				if (in_array($asName, $this->forbiddenAsToken[$filename])) {
+					Log::Error("You should not use ``$asName`` as the variable for loop!", false);
+					Log::Write("In $path");
+					Log::Write($matches[0][$key]);
+					Log::Error("Exited");
+				}
+			});
+		}
 	}
 	public function DisplayErrors($object, $type) {
 		$function = ucfirst($type);
@@ -120,7 +150,7 @@ class Template {
 			$this->RunChecker($value);
 		}
 
-		$this->CheckW3C();
+		//$this->CheckW3C();
 	}
 
 }
