@@ -3,16 +3,16 @@ namespace AppChecker\Scanner;
 use AppChecker\Log as Log;
 use AppChecker\Utils as Utils;
 
-$store = [];
 class GlobalVariables {
+
+	private static $store = [];
 /**
  * Load globals and save them to the store
  * @param string   $class
  * @param callable $callback
  */
-	function LoadGlobals($class, callable $callback) {
-		global $store;
-		$store[$class] = [
+	public static function LoadGlobals($class, callable $callback) {
+		self::$store[$class] = [
 			"callback" => $callback,
 			"data" => $callback(),
 		];
@@ -22,16 +22,15 @@ class GlobalVariables {
  * Compare new data and original data
  * @param string   $class
  */
-	function DiffGlobals($class) {
-		global $store;
-		return array_diff($store[$class]['callback'](), $store[$class]['data']);
+	public static function DiffGlobals($class) {
+		return array_diff(self::$store[$class]['callback'](), self::$store[$class]['data']);
 	}
 
 /**
  * Check the name of functions
  * @param string   $class
  */
-	function CheckFunctions($diff) {
+	public static function CheckFunctions($diff) {
 		global $app;
 		Log::Log('Testing functions');
 		$regex = str_replace("!!", $app->id, "/^(activeplugin_|installplugin_|uninstallplugin_)!!$|^!!_|^!!$/si");
@@ -40,7 +39,7 @@ class GlobalVariables {
 				Log::Log('Tested function: ' . $name);
 			} else {
 				Log::Error('Sub-standard function: ' . $name, false);
-				if ($ret = Utils\GetFunctionDescription($name)) {
+				if ($ret = Utils::GetFunctionDescription($name)) {
 					Log::Error("In " . $ret->getFileName(), false);
 					Log::Error("Line " . ($ret->getStartLine() - 1) . " To " . ($ret->getEndLine() - 1), false);
 				}
@@ -54,7 +53,7 @@ class GlobalVariables {
  * @param string $class
  * @param array  $diff
  */
-	function CheckOthers($class, $diff) {
+	public static function CheckOthers($class, $diff) {
 		global $app;
 		Log::Log('Testing ' . $class);
 		$regex = str_replace("!!", $app->id, "/^!!_?/si");
@@ -71,46 +70,46 @@ class GlobalVariables {
  * Call check functions
  * @param string $class
  */
-	function CheckDiff($class) {
-		$diff = DiffGlobals($class);
+	public static function CheckDiff($class) {
+		$diff = self::DiffGlobals($class);
 		$function = __NAMESPACE__ . '\\Check' . ucfirst($class);
 		if (function_exists($function)) {
 			return $function($diff);
 		}
-		return CheckOthers($class, $diff);
+		return self::CheckOthers($class, $diff);
 	}
 
 /**
  * Runner
  */
-	function Run() {
+	public static function Run() {
 		global $zbp;
 		global $app;
 
 		Log::Title('GLOBAL VARIABLES');
 		Log::Log('Scanning functions and global variables');
-		LoadGlobals('variables', function () {
+		self::LoadGlobals('variables', function () {
 			return array_keys($GLOBALS);
 		});
-		LoadGlobals('functions', function () {
+		self::LoadGlobals('functions', function () {
 			return get_defined_functions()['user'];
 		});
-		LoadGlobals('constants', function () {
+		self::LoadGlobals('constants', function () {
 			return array_keys(get_defined_constants());
 		});
-		LoadGlobals('classes__', function () {
+		self::LoadGlobals('classes__', function () {
 			return get_declared_classes();
 		});
 		$filename = $zbp->path . '/zb_users/' . $app->type . '/' . $app->id . '/include.php';
-		if (!\AppChecker\Utils\includeFile($filename)) {
+		if (!Utils::includeFile($filename)) {
 			Log::Log('No include file.');
 			return;
 		}
 
-		CheckDiff('variables');
-		CheckDiff('functions');
-		CheckDiff('constants');
-		CheckDiff('classes__');
+		self::CheckDiff('variables');
+		self::CheckDiff('functions');
+		self::CheckDiff('constants');
+		self::CheckDiff('classes__');
 
 	}
 

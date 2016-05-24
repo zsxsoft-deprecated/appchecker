@@ -1,6 +1,7 @@
 <?php
 namespace AppChecker;
 use AppChecker\Log;
+use AppChecker\Scanner;
 
 class MainFunc {
 	public static function testApp($appId, $arguBlogHost) {
@@ -38,7 +39,9 @@ class MainFunc {
 		Log::Title("System Information");
 		Log::Info("Z-BlogPHP: " . $zbp->version);
 		Log::Info("System: " . \GetEnvironment());
-		Scanner::Run();
+
+		$scanner = new Scanner();
+		$scanner->Run();
 		Log::Info('OK!');
 	}
 

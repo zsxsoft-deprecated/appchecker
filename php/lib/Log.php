@@ -66,7 +66,7 @@ class Log {
 	 * Log
 	 * @param string $text
 	 */
-	public static function Log($text) {
+	public static function Log($text, $flush = true) {
 
 		$text = "[" . date("Y/m/d h:i:s a") . "] " . $text;
 		if (defined('PHP_SYSTEM')) {
@@ -75,8 +75,11 @@ class Log {
 			}
 		}
 
-		ob_flush();
-		flush();
+		if ($flush) {
+			ob_flush();
+			flush();
+		}
+
 		if (is_null(self::$outputInterface)) {
 			echo $text . PHP_EOL;
 		} else {

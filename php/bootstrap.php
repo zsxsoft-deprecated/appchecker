@@ -16,7 +16,6 @@ spl_autoload_register(function ($class) {
 	$fileName = '/lib/' . $className . '.php';
 
 	if (is_readable(dirname(__FILE__) . $fileName)) {
-		var_dump($fileName);
 		include $fileName;
 	}
 
@@ -29,9 +28,11 @@ if (!is_dir($path) || !chdir($path)) {
 }
 
 require 'zb_system/function/c_system_base.php';
-Log::Log('Loading Z-BlogPHP...');
+Log::Log('Loading Z-BlogPHP...', false);
 $zbp->Load();
 \ZBlogException::ClearErrorHook();
+
+ob_flush();
 
 $application = new Application();
 $application->add(new Run());
