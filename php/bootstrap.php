@@ -17,7 +17,7 @@ spl_autoload_register(function ($class) {
 	$fileName = '/lib/' . $className . '.php';
 
 	if (is_readable(dirname(__FILE__) . $fileName)) {
-		include $fileName;
+		include dirname(__FILE__) . $fileName;
 	}
 
 });
