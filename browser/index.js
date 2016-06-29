@@ -19,7 +19,7 @@
         win.on('closed', () => {
             win = null;
             process.stdout.write(JSON.stringify(stdout));
-            process.exit();
+            process.exit(0);
         });
         win.webContents.once('did-finish-load', () => {
             win.webContents.executeJavaScript(commander.code);
