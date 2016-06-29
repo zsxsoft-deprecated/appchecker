@@ -60,16 +60,7 @@ class Template {
             Log::Warning('Validation failed: ' . $result->getErrorCount() . " error(s) and " . $result->getWarningCount() . ' warning(s).');
         }
     }
-    /**
-     * Check Useless jQuery
-     */
-    public function CheckUselessJQuery() {
-        $regex = "/src=[\"'](((?!zb_system).)*?jquery[\.0-9\-]*?(min)?\.js)[\"']/i";
-        $matches = null;
-        if (preg_match($regex, $this->file, $matches)) {
-            Log::Error('Detected useless jQuery: ' . $matches[1] . ' in ' . $this->path, false);
-        }
-    }
+
     /**
      * Check Error `As`
      */
@@ -111,6 +102,7 @@ class Template {
         $zbp->SaveConfig('system');
 
         $template = $zbp->PrepareTemplate($app->id);
+        $template->LoadTemplates();
         $zbp->BuildTemplate($template);
         
     }
@@ -125,10 +117,8 @@ class Template {
     public function CheckW3C() {
         global $zbp;
         global $app;
-        Log::Log("Checking W3C...");
-        Log::Log("Validating " . $zbp->host);
+        Log::Log("Initializing W3C...");
         $this->ValidateW3C($zbp->host);
-        Log::Log("Validating " . $this->articleUrl);
         $this->ValidateW3C($this->articleUrl);
     }
     /**
@@ -138,7 +128,6 @@ class Template {
     public function RunChecker($filePath) {
         $this->path = $filePath;
         $this->file = file_get_contents($this->path);
-        $this->CheckUselessJQuery();
         $this->CheckAs();
     }
 

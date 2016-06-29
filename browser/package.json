@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "commander": "^2.9.0",
-    "deep-assign": "^2.0.0"
+    "deep-assign": "^2.0.0",
+    "electron-screenshot-app": "^3.0.1"
   }
 }

@@ -7,6 +7,9 @@ class Runner {
         $ret = [];
         $execJavaScript = escapeshellarg(str_replace("\n", "", "
 {
+let { ipcRenderer, remote } = require('electron');
+let current = remote.getCurrentWindow();
+
 function detect(message, detectFunction) {
 	if (detectFunction()) {
 		ElectronRet.success.push('Detected: ' + message);
@@ -27,8 +30,8 @@ detect('typeof VerifyMessage === undefined', () => {return typeof VerifyMessage 
 	
 }
 
-require('electron').ipcRenderer.send('message', ElectronRet);
-require('electron').remote.getCurrentWindow().destroy();
+ipcRenderer.send('message', ElectronRet);
+remote.getCurrentWindow().destroy();
 }
 "));
 
@@ -39,6 +42,7 @@ require('electron').remote.getCurrentWindow().destroy();
         }
         $execGlobal .= ' -u "' . $url . '" ';
         $execGlobal .= ' -r ' . $execJavaScript . ' ';
+        $execGlobal .= ' -s ' . escapeshellarg($zbp->path . '/screenshot-' . time() . '.png');
 
         exec($execGlobal, $ret);
 
