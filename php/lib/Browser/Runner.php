@@ -41,6 +41,19 @@ require('electron').remote.getCurrentWindow().destroy();
         $execGlobal .= ' -r ' . $execJavaScript . ' ';
 
         exec($execGlobal, $ret);
-        var_dump($ret);
+
+        $newArray = array_filter($ret);
+        $ret = null;
+        foreach ($newArray as $item) {
+            try {
+                $ret = json_decode($item, true);
+                break;
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+
+        return $ret;
     }
+
 }
