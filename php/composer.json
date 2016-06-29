@@ -11,7 +11,7 @@
         "url": "https://github.com/zblogapp/w3c-validator"
     }, {
         "type": "composer",
-        "url": "http://packagist.phpcomposer.com"
+        "url": "https://packagist.phpcomposer.com"
     }, {
         "packagist": false
     }],
