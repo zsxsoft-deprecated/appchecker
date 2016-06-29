@@ -1,0 +1,23 @@
+{
+  "name": "appchecker-browser",
+  "version": "0.0.1",
+  "description": "Browser for AppChecker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zsxsoft/appchecker/"
+  },
+  "author": "zsx <zsx@zsxsoft.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.5"
+  },
+  "dependencies": {
+    "commander": "^2.9.0",
+    "koa": "^2.0.0",
+    "koa-router": "^5.4.0"
+  }
+}
