@@ -16,6 +16,7 @@
     "electron-prebuilt": "^1.2.5"
   },
   "dependencies": {
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "deep-assign": "^2.0.0"
   }
 }
