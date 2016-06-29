@@ -2,7 +2,7 @@
 namespace AppChecker\Browser;
 
 class Runner {
-    public static function RunElectron() {
+    public static function RunElectron($url) {
         global $zbp;
         $ret = [];
         $execJavaScript = escapeshellarg(str_replace("\n", "", "
@@ -37,7 +37,7 @@ require('electron').remote.getCurrentWindow().destroy();
         if ($execGlobal === false) {
             $execGlobal = "electron " . $dirName;
         }
-        $execGlobal .= ' -u "' . $zbp->host. '" ';
+        $execGlobal .= ' -u "' . $url . '" ';
         $execGlobal .= ' -r ' . $execJavaScript . ' ';
 
         exec($execGlobal, $ret);

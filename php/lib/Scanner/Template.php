@@ -12,6 +12,8 @@ class Template {
     private $origTheme = "";
     private $origCSS = "";
 
+    private $articleUrl = "";
+
     public function __construct() {
         $fba = &$this->forbiddenAsToken;
         $fba['index'] = [
@@ -107,6 +109,10 @@ class Template {
         $zbp->Config('system')->ZC_BLOG_THEME = $app->id;
         $zbp->Config('system')->ZC_BLOG_CSS = array_keys($app->GetCssFiles())[0];
         $zbp->SaveConfig('system');
+
+        $template = $zbp->PrepareTemplate($app->id);
+        $zbp->BuildTemplate($template);
+        
     }
 
     public function RestoreTheme() {
@@ -120,8 +126,10 @@ class Template {
         global $zbp;
         global $app;
         Log::Log("Checking W3C...");
-        Log::Log("Validating INDEX");
+        Log::Log("Validating " . $zbp->host);
         $this->ValidateW3C($zbp->host);
+        Log::Log("Validating " . $this->articleUrl);
+        $this->ValidateW3C($this->articleUrl);
     }
     /**
      * Run Checker
@@ -136,13 +144,29 @@ class Template {
 
 
     public function RunBrowser() {
-        $ret = \AppChecker\Browser\Runner::RunElectron();
-        foreach ($ret['error'] as $error) {
-            Log::Error($error, false);
+        global $zbp;
+        $checkArray = [$zbp->host, $this->articleUrl];
+        foreach ($checkArray as $item) {
+            $ret = \AppChecker\Browser\Runner::RunElectron($item);
+            foreach ($ret['error'] as $error) {
+                Log::Error($error, false);
+            }
+            foreach ($ret['info'] as $error) {
+                Log::Info($error);
+            }
         }
-        foreach ($ret['info'] as $error) {
-            Log::Info($error);
+        
+    }
+
+    public function GetOneArticle() {
+        global $zbp;
+        $sql = $zbp->db->sql->get()->select('%pre%post')->column('log_ID')->limit(1)->sql;
+        $query = $zbp->GetListType('Post', $sql);
+        if (count($query) == 0) {
+            return;
         }
+        $article = $query[0];
+        $this->articleUrl = $article->Url;
     }
 
     /**
@@ -164,6 +188,7 @@ class Template {
         }
 
         $this->ChangeTheme();
+        $this->GetOneArticle();
         $this->RunBrowser();
         $this->CheckW3C();
         $this->RestoreTheme();
