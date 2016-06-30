@@ -10,6 +10,7 @@
     const commander = global.commander;
 
     let exitCount = 0;
+    let exitMaxCount = 1;
     let stdout = {
     	error: [], 
     	info: [], 
@@ -17,7 +18,7 @@
     };
 
     function addExitCount() {
-    	if (++exitCount === 2) {
+    	if (++exitCount >= exitMaxCount) {
     		process.exit(0);
     	}
     }
@@ -28,6 +29,10 @@
         .option('-s, --screenshotPath [path]', 'Screenshot path')
         .option('-r, --code [code]', 'Run Code', "require('electron').ipcRenderer.send('message', {message: 'OK'});require('electron').remote.getCurrentWindow().destroy();")
         .parse(process.argv);
+
+    if (commander.screenshotPath) {
+    	exitMaxCount = 2;
+    }
 
     ipcMain.on('message', (event, arg) => {
     	stdout = deepAssign(stdout, arg);
@@ -47,15 +52,21 @@
         });
         win.loadURL(commander.url);
 
-        screenshot({
-        	url: commander.url, 
-        	height: 1080, 
-        	width: 1920,
-        	page: true
-        }, (err, image) => {
-        	require("fs").writeFile(`./${new Date().getTime()}.png`, image.data);
-        	addExitCount();
-        });
+        if (commander.screenshotPath) {
+        	screenshot({
+	        	url: commander.url, 
+	        	height: 1080, 
+	        	width: 1920,
+	        	page: true, 
+	        	format: "jpg", 
+	        	delay: 500, 
+	        	css: "html,body{ background-color: white;}"
+	        }, (err, image) => {
+	        	require("fs").writeFile(commander.screenshotPath, image.data);
+	        	addExitCount();
+	        });	
+        }
+        
     });
 
 

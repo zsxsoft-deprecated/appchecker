@@ -42,7 +42,7 @@ remote.getCurrentWindow().destroy();
         }
         $execGlobal .= ' -u "' . $url . '" ';
         $execGlobal .= ' -r ' . $execJavaScript . ' ';
-        $execGlobal .= ' -s ' . escapeshellarg($zbp->path . '/screenshot-' . time() . '.png');
+        $execGlobal .= ' -s ' . escapeshellarg($zbp->path . '/screenshot-' . time() . '.jpg');
 
         exec($execGlobal, $ret);
 
