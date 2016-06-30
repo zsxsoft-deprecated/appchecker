@@ -36,9 +36,11 @@ remote.getCurrentWindow().destroy();
 "));
 
         $dirName = realpath(dirname(__FILE__) . '/../../../browser/');
-        $execGlobal = realpath($dirName . '/browser.exe') . " . ";
+        $execGlobal = realpath($dirName . '/browser.exe');
         if ($execGlobal === false) {
             $execGlobal = "electron " . $dirName;
+        } else {
+            $execGlobal .= " . ";
         }
         $execGlobal .= ' -u "' . $url . '" ';
         $execGlobal .= ' -r ' . $execJavaScript . ' ';

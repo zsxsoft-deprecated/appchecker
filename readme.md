@@ -6,22 +6,17 @@ Z-Blog应用中心上架检测工具。
 ### 安装Electron
 ``npm install electron-prebuilt -g``
 
-### 设置环境变量
-首先需要设置环境变量``ZBP_PATH``为你的Z-BlogPHP所在路径。各sh可无视此节。
-cmd: ``SET ZBP_PATH=YOUR_ZBP_PATH``
+### 修改配置文件
+
+在config.json里修改博客地址、博客本地路径等信息。
 
 ### 检测已安装的应用
 
-cmd: ``php checker run --bloghost=[YOUR_BLOG_HOST] [YOUR_APP_ID]``
-
-sh: ``ZBP_PATH=YOUR_ZBP_PATH php checker run --bloghost=[YOUR_BLOG_HOST] [YOUR_APP_ID]``
+``php checker run [YOUR_APP_ID]``
 
 ### 解压并检测应用
 
-cmd: ``php checker install --bloghost=[YOUR_BLOG_HOST] [YOUR_ZBA_PATH]``
-
-sh: ``ZBP_PATH=YOUR_ZBP_PATH php checker install--bloghost=[YOUR_BLOG_HOST] [YOUR_ZBA_PATH]``
-
+``php checker install [YOUR_ZBA_PATH]``
 
 ## 环境要求
 GUI: Windows + .NET Framework 4.0

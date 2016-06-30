@@ -23,7 +23,7 @@ spl_autoload_register(function ($class) {
 
 });
 
-$path = getenv('ZBP_PATH');
+$path = $config->ZBPPath;
 if (!is_dir($path) || !chdir($path)) {
     echo 'Cannot open your Z-BlogPHP index.php: ' . $path;
     exit;
