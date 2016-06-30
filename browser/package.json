@@ -12,7 +12,7 @@
   },
   "author": "zsx <zsx@zsxsoft.com>",
   "license": "MIT",
-  "devDependencies": {
+  "peerDependencies": {
     "electron-prebuilt": "^1.2.5"
   },
   "dependencies": {

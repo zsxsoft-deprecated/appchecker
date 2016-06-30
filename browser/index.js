@@ -62,7 +62,7 @@
 	        	delay: 500, 
 	        	css: "html,body{ background-color: white;}"
 	        }, (err, image) => {
-	        	require("fs").writeFile(commander.screenshotPath, image.data);
+	        	require("fs").writeFileSync(commander.screenshotPath, image.data);
 	        	addExitCount();
 	        });	
         }
