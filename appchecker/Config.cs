@@ -99,6 +99,8 @@ namespace AppChecker
                 OnPropertyChanged(new PropertyChangedEventArgs("PHPIniPath"));
             }
         }
+        [DataMember]
+        public string ArticleId = "1";
 
         public event PropertyChangedEventHandler PropertyChanged;
 

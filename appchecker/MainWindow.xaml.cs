@@ -138,5 +138,10 @@ namespace AppChecker
             }
         }
 
+        private void btnSetArticleId_Click(object sender, RoutedEventArgs e)
+        {
+            string ret = Microsoft.VisualBasic.Interaction.InputBox("文章ID？", "", Config.Data.ArticleId);
+            Config.Data.ArticleId = ret;
+        }
     }
 }

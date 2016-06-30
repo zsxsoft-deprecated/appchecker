@@ -149,8 +149,12 @@ class Template {
 
     public function GetOneArticle() {
         global $zbp;
-        $sql = $zbp->db->sql->get()->select('%pre%post')->column('log_ID')->limit(1)->sql;
-        $query = $zbp->GetListType('Post', $sql);
+        global $config;
+        $sql = $zbp->db->sql->get()->select('%pre%post')->column('log_ID')->limit(1);
+        if (isset($config->ArticleId)) {
+            $sql->where(array("=", "log_ID", $config->ArticleId));
+        }
+        $query = $zbp->GetListType('Post', $sql->sql);
         if (count($query) == 0) {
             return;
         }
