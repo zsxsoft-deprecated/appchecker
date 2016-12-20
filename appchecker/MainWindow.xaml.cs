@@ -37,11 +37,14 @@ namespace AppChecker
             Config.Save();
             WindowLog.Clear();
 
-            if (Config.Data.AppId.Substring(Config.Data.AppId.Length - 4).ToLower() == ".zba")
-            {
-                PHPConnection.InstallZBA(Config.Data, Config.Data.AppId).Start();
-            } else
-            {
+            if (Config.Data.AppId.Length >= ".zba".Length) {
+
+                if (Config.Data.AppId.Substring(Config.Data.AppId.Length - 4).ToLower() == ".zba") {
+                    PHPConnection.InstallZBA(Config.Data, Config.Data.AppId).Start();
+                } else {
+                    PHPConnection.RunChecker(Config.Data).Start();
+                }
+            } else {
                 PHPConnection.RunChecker(Config.Data).Start();
             }
             
