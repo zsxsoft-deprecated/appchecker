@@ -3,6 +3,7 @@ namespace AppChecker\Scanner;
 
 use AppChecker\Log as Log;
 use AppChecker\Utils;
+use \W3C\HtmlValidator;
 
 class Template {
     private $file = "";
@@ -41,11 +42,12 @@ class Template {
 
     /**
      * Validate W3C
+     * @param string $url
      */
     public function ValidateW3C($url) {
         Log::Log('Testing ' . $url);
         ob_flush();
-        $validator = new \W3C\HtmlValidator();
+        $validator = new HtmlValidator();
         $result = $validator->validateHTML5(file_get_contents($url));
 
         if ($result->isValid()) {
@@ -84,6 +86,11 @@ class Template {
             });
         }
     }
+
+    /**
+     * @param $object
+     * @param $type
+     */
     public function DisplayErrors($object, $type) {
         $function = ucfirst($type);
         Log::$function('In Line ' . $object->getLine() . ', Col ' . $object->getColumn() . ", " . str_replace("\n", "", $object->getMessage()), false);
@@ -97,20 +104,16 @@ class Template {
         Log::Log("Changing Theme...");
         $this->origTheme = $zbp->option['ZC_BLOG_THEME'];
         $this->origCSS = $zbp->option['ZC_BLOG_CSS'];
-        $zbp->Config('system')->ZC_BLOG_THEME = $app->id;
-        $zbp->Config('system')->ZC_BLOG_CSS = array_keys($app->GetCssFiles())[0];
-        $zbp->SaveConfig('system');
 
-        $template = $zbp->PrepareTemplate($app->id);
-        $template->LoadTemplates();
-        $zbp->BuildTemplate($template);
-        
+        \SetTheme($app->id, array_keys($app->GetCssFiles())[0]);
+        $zbp->BuildModule();
+        $zbp->SaveCache();
+        Log::Log("Theme changed!");
     }
 
     public function RestoreTheme() {
         global $zbp;
-        $zbp->Config('system')->ZC_BLOG_THEME = $this->origTheme;
-        $zbp->Config('system')->ZC_BLOG_CSS = $this->origCSS;
+        \SetTheme($this->origTheme, $this->origCSS);
         $zbp->SaveConfig('system');
     }
 
@@ -123,7 +126,7 @@ class Template {
     }
     /**
      * Run Checker
-     * @param string $path
+     * @param string $filePath
      */
     public function RunChecker($filePath) {
         $this->path = $filePath;
