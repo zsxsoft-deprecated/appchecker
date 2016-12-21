@@ -12,6 +12,7 @@ use AppChecker\Install;
 use AppChecker\Log;
 use AppChecker\Run;
 use Symfony\Component\Console\Application;
+
 spl_autoload_register(function ($class) {
     $className = str_replace('\\', '/', str_replace('AppChecker\\', '', $class));
     $fileName = '/lib/' . $className . '.php';
@@ -38,6 +39,7 @@ if (!defined('ZC_VERSION_FULL')) {
 
 
 $zbp->Load();
+ErrorHandler::Hook();
 ob_flush();
 
 $application = new Application();

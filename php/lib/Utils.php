@@ -5,6 +5,7 @@ class Utils {
 /**
  * Include file
  * @param string $path
+ * @return bool
  */
 	public static function IncludeFile($path) {
 		global $zbp;
@@ -76,7 +77,7 @@ class Utils {
 		}
 
 		return $ret;
-	}
+}
 
 	public static function CheckCanBeString($obj) {
 		return $obj === null || is_scalar($obj) || is_callable([$obj, '__toString']);

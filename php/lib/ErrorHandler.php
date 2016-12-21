@@ -20,21 +20,21 @@ class ErrorHandler {
 		$traceString = "";
 
 		foreach (debug_backtrace() as $iInt => $sData) {
+		    echo $iInt . ". " ;
+        echo (isset($sData['class']) ? $sData['class'] . $sData['type'] : "");
+        echo $sData['function'] . '(';
+        if (isset($sData['args'])) {
+            foreach ($sData['args'] as $argKey => $argVal) {
+                echo $argKey . ' => ' . (Utils::CheckCanBeString($argVal) ? htmlspecialchars((string) $argVal) : 'Object') . ',';
+            }
+        }
+        echo ' ' . (isset($sData['file']) ? $sData['file'] : 'Callback');
+        if (isset($sData['line'])) {
+            echo ': ' . $sData['line'];
+        }
+        echo ")\n";
 
-			echo "File: " . (isset($sData['file']) ? $sData['file'] : 'Callback') . "\n";
-			echo "Function: (Line ";
-			if (isset($sData['line'])) {
-				echo $sData['line'];
-			}
-			echo ")\n";
-			echo (isset($sData['class']) ? $sData['class'] . $sData['type'] : "");
-			echo $sData['function'] . '(';
-			if (isset($sData['args'])) {
-				foreach ($sData['args'] as $argKey => $argVal) {
-					echo $argKey . ' => ' . (Utils::CheckCanBeString($argVal) ? htmlspecialchars((string) $argVal) : 'Object') . ',';
-				}
-			}
-			echo ")\n\n\n";
+			echo "\n\n";
 		}
 		ob_flush();
 		Log::Error("AppChecker Exited");
@@ -46,21 +46,22 @@ class ErrorHandler {
 	 * @return true
 	 */
 	public static function Hook() {
-		set_error_handler(array(__CLASS__, 'ErrorHandler'));
-		set_exception_handler(array(__CLASS__, 'ExceptionHandler'));
-		register_shutdown_function(array(__CLASS__, 'ShutdownFunction'));
-		return true;
+      set_error_handler(array(__CLASS__, 'ErrorHandler'));
+		  set_exception_handler(array(__CLASS__, 'ExceptionHandler'));
+		  register_shutdown_function(array(__CLASS__, 'ShutdownFunction'));
+      Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', '\AppChecker\ErrorHandler::DoZbpError', PLUGIN_EXITSIGNAL_RETURN);
+      return true;
 	}
 	/**
 	 * Unhook
 	 * @return true
 	 */
 	public static function Unhook() {
-		$function = array(__CLASS__, 'DoNothing');
-		set_error_handler($function);
-		set_exception_handler($function);
-		register_shutdown_function($function);
-		return true;
+		  $function = array(__CLASS__, 'DoNothing');
+	  	set_error_handler($function);
+	  	set_exception_handler($function);
+	  	register_shutdown_function($function);
+  		return true;
 	}
 	/**
 	 * Empty Function (Do nothing)
@@ -75,14 +76,13 @@ class ErrorHandler {
 	 * @param  string $errstr
 	 * @param  string $errfile
 	 * @param  integer $errline
-	 * @param  array $errcontext
 	 * @return true
 	 */
 	public static function ErrorHandler($errno, $errstr, $errfile, $errline) {
 
-		$zbe = \ZBlogException::GetInstance();
-		$zbe->ParseError($errno, $errstr, $errfile, $errline);
-		self::Output($zbe);
+	  	$zbe = \ZBlogException::GetInstance();
+	  	$zbe->ParseError($errno, $errstr, $errfile, $errline);
+	  	self::Output($zbe);
 
 	}
 	/**
@@ -91,11 +91,9 @@ class ErrorHandler {
 	 * @return true
 	 */
 	public static function ExceptionHandler($exception) {
-
-		$zbe = \ZBlogException::GetInstance();
-		$zbe->ParseException($exception);
-		self::Output($zbe);
-
+  		$zbe = \ZBlogException::GetInstance();
+	  	$zbe->ParseException($exception);
+  		self::Output($zbe);
 	}
 
 	/**
@@ -103,11 +101,19 @@ class ErrorHandler {
 	 * @return true
 	 */
 	public static function ShutdownFunction() {
-
-		if ($error = error_get_last()) {
-			$zbe = \ZBlogException::GetInstance();
-			$zbe->ParseShutdown($error);
-			self::Output($zbe);
-		}
+      if ($error = error_get_last()) {
+          $zbe = \ZBlogException::GetInstance();
+          $zbe->ParseShutdown($error);
+          self::Output($zbe);
+      }
 	}
+
+	public static function DoZbpError($number, $message, $file, $line_number) {
+      $zbe = \ZBlogException::GetInstance();
+      $zbe->message = $message;
+      $zbe->file = $file;
+      $zbe->line = $line_number;
+      $zbe->type = $number;
+      self::Output($zbe);
+  }
 }

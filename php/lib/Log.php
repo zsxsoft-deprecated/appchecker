@@ -15,7 +15,6 @@ class Log {
 	/**
 	 * Output info
 	 * @param string $text
-	 * @param bool $exit
 	 */
 	public static function Info($text) {
 		self::Log('<info>' . $text . '</info>');
@@ -109,6 +108,7 @@ class Log {
 	/**
 	 * Output something then exit
 	 * @param string $text
+   * @param integer $errno
 	 */
 	public static function End($text, $errno = 0) {
 		self::Log($text);
