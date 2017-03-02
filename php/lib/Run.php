@@ -9,23 +9,24 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Run extends Command {
-    protected function configure() {
+class Run extends Command
+{
+
+    protected function configure()
+    {
         $this
             ->setName('run')
-            ->setDescription('To run checker')
+            ->setDescription('Run the checker')
             ->addArgument(
                 'appid',
                 InputArgument::REQUIRED,
                 'AppID'
             );
-
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
-
-        Log::SetOutputInterface($output);
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        Log::setOutputInterface($output);
         MainFunc::testApp($input->getArgument("appid"));
-
     }
 }

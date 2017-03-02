@@ -4,8 +4,11 @@ namespace AppChecker;
 use AppChecker\Log;
 use AppChecker\Scanner;
 
-class MainFunc {
-    public static function testApp($appId) {
+class MainFunc
+{
+
+    public static function testApp($appId)
+    {
 
         global $zbp;
         global $app;
@@ -20,37 +23,38 @@ class MainFunc {
         $zbp->host = $bloghost;
         
 
-        Log::Log('Detected $bloghost = ' . $bloghost);
-        Log::Info('Completed!');
-        Log::Log('Getting App...');
+        Log::log('Detected $bloghost = ' . $bloghost);
+        Log::info('Completed!');
+        Log::log('Getting App...');
         
 
         if ($zbp->CheckApp($appId)) {
-            Log::Error('You should disable ' . $appId . ' in Z-BlogPHP first.');
+            Log::error('You should disable ' . $appId . ' in Z-BlogPHP first.');
         }
         
         $app = $zbp->LoadApp('plugin', $appId);
         if ($app->id !== null) {
-            Log::Info('Detected Plugin.');
+            Log::info('Detected Plugin.');
         } else {
             $app = $zbp->LoadApp('theme', $appId);
             if ($app->id !== null) {
-                Log::Info('Detected Theme.');
+                Log::info('Detected Theme.');
             } else {
-                Log::Error('App not Found!');
+                Log::error('App not Found!');
             }
         }
 
         Log::Title("System Information");
-        Log::Info("Z-BlogPHP: " . ZC_VERSION_FULL);
-        Log::Info("System: " . \GetEnvironment());
+        Log::info("Z-BlogPHP: " . ZC_VERSION_FULL);
+        Log::info("System: " . \GetEnvironment());
 
         $scanner = new Scanner();
-        $scanner->Run();
-        Log::Info('OK!');
+        $scanner->run();
+        Log::info('OK!');
     }
 
-    public static function installApp($filePath) {
+    public static function installApp($filePath)
+    {
         $xmlData = file_get_contents($filePath);
         $charset = array();
         $charset[1] = substr($xmlData, 0, 1);

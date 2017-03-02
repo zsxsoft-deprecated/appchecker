@@ -1,8 +1,10 @@
 <?php
 namespace AppChecker\Browser;
 
-class Runner {
-    public static function RunElectron($url) {
+class Runner
+{
+    public static function runElectron($url)
+    {
         global $zbp;
         $ret = [];
         $execJavaScript = escapeshellarg(str_replace("\n", "", "
@@ -17,9 +19,12 @@ function detect(message, detectFunction) {
 		ElectronRet.error.push('Not Detected: ' + message);
 	}
 };
-detect('typeof RevertComment === undefined', () => {return typeof RevertComment === 'undefined'});
-detect('typeof GetComments === undefined', () => {return typeof GetComments === 'undefined'});
-detect('typeof VerifyMessage === undefined', () => {return typeof VerifyMessage === 'undefined'});
+detect('typeof RevertComment === undefined', 
+    () => {return typeof RevertComment === 'undefined'});
+detect('typeof GetComments === undefined', 
+    () => {return typeof GetComments === 'undefined'});
+detect('typeof VerifyMessage === undefined', 
+    () => {return typeof VerifyMessage === 'undefined'});
 
 {
 	try {
@@ -61,5 +66,4 @@ remote.getCurrentWindow().destroy();
 
         return $ret;
     }
-
 }

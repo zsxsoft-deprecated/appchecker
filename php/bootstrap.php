@@ -20,7 +20,6 @@ spl_autoload_register(function ($class) {
     if (is_readable(dirname(__FILE__) . $fileName)) {
         include dirname(__FILE__) . $fileName;
     }
-
 });
 
 $path = $config->ZBPPath;

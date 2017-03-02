@@ -8,8 +8,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Install extends Command {
-    protected function configure() {
+class Install extends Command
+{
+
+    protected function configure()
+    {
         $this
             ->setName('install')
             ->setDescription('To install a zba then run checker')
@@ -18,19 +21,19 @@ class Install extends Command {
                 InputArgument::REQUIRED,
                 'The Path of ZBA File'
             );
-
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $appPath = $input->getArgument("zbapath");
-        Log::SetOutputInterface($output);
+        Log::setOutputInterface($output);
         $appId = MainFunc::installApp($appPath);
         if ($appId == false) {
-            Log::Info("Extract " . $appPath . " failed!");
+            Log::info("Extract " . $appPath . " failed!");
 
             return;
         }
-        Log::Log("Extracted: " . $appId);
+        Log::log("Extracted: " . $appId);
         MainFunc::testApp($appId);
     }
 }
