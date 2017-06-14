@@ -27,10 +27,6 @@ class MainFunc
         Log::info('Completed!');
         Log::log('Getting App...');
         
-
-        if ($zbp->CheckApp($appId)) {
-            Log::error('You should disable ' . $appId . ' in Z-BlogPHP first.');
-        }
         
         $app = $zbp->LoadApp('plugin', $appId);
         if ($app->id !== null) {

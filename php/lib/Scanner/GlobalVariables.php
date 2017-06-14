@@ -116,9 +116,14 @@ class GlobalVariables
             return get_declared_classes();
         });
         $filename = $zbp->path . '/zb_users/' . $app->type . '/' . $app->id . '/include.php';
-        if (!Utils::includeFile($filename)) {
-            Log::log('No include file.');
 
+        $includeFlag = Utils::includeFile($filename);
+        if ($includeFlag) {
+            if (!is_readable($filename)) {
+                Log::log('No include file.');
+            } else {
+                Log::warning('You\'d better disable this app before check.');
+            }
             return;
         }
 

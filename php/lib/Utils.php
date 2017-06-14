@@ -13,9 +13,7 @@ class Utils
     {
         global $zbp;
         if (is_readable($path)) {
-            require $path;
-
-            return true;
+            return require_once $path;
         } else {
             return false;
         }
