@@ -121,6 +121,8 @@ class Template
         \SetTheme($app->id, array_keys($app->GetCssFiles())[0]);
         $zbp->BuildModule();
         $zbp->SaveCache();
+        Log::log("Compiling Theme...");
+        $zbp->CheckTemplate();
         Log::log("Theme changed!");
     }
 
