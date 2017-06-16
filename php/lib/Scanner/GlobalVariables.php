@@ -118,7 +118,7 @@ class GlobalVariables
         $filename = $zbp->path . '/zb_users/' . $app->type . '/' . $app->id . '/include.php';
 
         $includeFlag = Utils::includeFile($filename);
-        if ($includeFlag) {
+        if ($includeFlag === true) {
             if (!is_readable($filename)) {
                 Log::log('No include file.');
             } else {
