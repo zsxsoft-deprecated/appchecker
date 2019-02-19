@@ -1,6 +1,7 @@
-AppChecker
+AppChecker (Deprecated)
 =============================
 Z-Blog应用中心上架检测工具。
+**Deprecated, see: https://github.com/zsxsoft/zbp-app-validator**
 
 ## 命令行使用说明
 ### 安装Electron
